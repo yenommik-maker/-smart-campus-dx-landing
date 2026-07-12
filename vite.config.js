@@ -3,6 +3,6 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "/smart-campus-dx-landing/",
+  base: "/-smart-campus-dx-landing/",
   server: { port: 5174 },
 });
