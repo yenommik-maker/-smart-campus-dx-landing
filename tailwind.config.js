@@ -4,11 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#2563EB",
+        primary: "#3B82F6",
         primaryDark: "#1E3A5F",
         gold: "#F59E0B",
-        ink: "#1A202C",
-        subtext: "#64748B",
+        ink: "#F1F5F9",
+        subtext: "#94A3B8",
+        surface: "#0B1120",
+        surfaceAlt: "#0F172A",
+        card: "#141E33",
       },
     },
   },

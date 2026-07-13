@@ -15,8 +15,8 @@ export default defineConfig({
         start_url: "/-smart-campus-dx-landing/",
         scope: "/-smart-campus-dx-landing/",
         display: "standalone",
-        background_color: "#FFFFFF",
-        theme_color: "#2563EB",
+        background_color: "#0B1120",
+        theme_color: "#0B1120",
         lang: "ko",
         icons: [
           { src: "icon-192.png", sizes: "192x192", type: "image/png" },

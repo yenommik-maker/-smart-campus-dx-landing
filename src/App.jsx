@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { RoundedBox, Float } from "@react-three/drei";
-import { motion, AnimatePresence, useInView, animate } from "framer-motion";
+import { motion, AnimatePresence, useInView, animate, useScroll, useTransform } from "framer-motion";
 
 const PROTOTYPE_URL = "https://yenommik-maker.github.io/smart-campus-dx-prototype/";
 
@@ -144,9 +144,9 @@ function SceneLights() {
 
 function Navbar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-100">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-md border-b border-white/10">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-        <a href="#top" className="text-lg font-bold text-primaryDark tracking-tight">
+        <a href="#top" className="text-lg font-bold text-white tracking-tight">
           Smart Campus DX
         </a>
         <div className="flex items-center gap-7">
@@ -196,7 +196,7 @@ function CountUpNumber({ target, suffix = "" }) {
   }, [inView, target]);
 
   return (
-    <span ref={ref} className="text-5xl font-bold text-primaryDark">
+    <span ref={ref} className="text-5xl font-bold text-white">
       {display.toLocaleString()}
       {suffix}
     </span>
@@ -206,7 +206,7 @@ function CountUpNumber({ target, suffix = "" }) {
 function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-slate-200 last:border-b-0 py-5">
+    <div className="border-b border-white/10 last:border-b-0 py-5">
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center justify-between text-left gap-4"
@@ -236,22 +236,38 @@ function FaqItem({ q, a }) {
 }
 
 export default function App() {
+  const heroRef = useRef(null);
+  const { scrollYProgress: heroScroll } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroBgY = useTransform(heroScroll, [0, 1], ["0%", "25%"]);
+
   return (
-    <div id="top" className="font-sans text-ink bg-white">
+    <div id="top" className="font-sans text-ink bg-surface">
       <Navbar />
 
       {/* 1. Hero */}
-      <section className="relative pt-40 pb-24 px-6 overflow-hidden">
-        <div className="max-w-6xl mx-auto grid grid-cols-2 gap-12 items-center">
+      <section ref={heroRef} className="relative pt-40 pb-24 px-6 overflow-hidden">
+        <motion.div className="absolute inset-0 z-0" style={{ y: heroBgY }}>
+          <div
+            className="absolute inset-0 scale-110 bg-cover bg-center blur-[2px]"
+            style={{ backgroundImage: `url(${import.meta.env.BASE_URL}hero-bg.jpg)` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-surface via-surface/75 to-surface/35" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-surface" />
+        </motion.div>
+
+        <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-primary text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full mb-6 ring-1 ring-primary/20">
               ✨ 공공기관 연수원 디지털 전환
             </div>
-            <h1 className="text-5xl font-bold text-ink leading-[1.25] mb-6">
+            <h1 className="text-5xl font-bold text-white leading-[1.25] mb-6">
               연수원 운영,
               <br />
               이제 스스로 돌아갑니다
@@ -266,13 +282,13 @@ export default function App() {
                 href={PROTOTYPE_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="bg-primary text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-blue-700 transition-colors"
+                className="bg-primary text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-blue-600 transition-colors"
               >
                 프로토타입 보기
               </a>
               <a
                 href="#problem"
-                className="border border-slate-300 text-ink font-semibold px-6 py-3.5 rounded-xl hover:border-primary hover:text-primary transition-colors"
+                className="border border-white/20 text-ink font-semibold px-6 py-3.5 rounded-xl hover:border-primary hover:text-primary transition-colors"
               >
                 자세히 알아보기
               </a>
@@ -289,9 +305,9 @@ export default function App() {
       </section>
 
       {/* 2. Problem */}
-      <FadeInSection id="problem" className="bg-[#F8FAFC] py-24 px-6">
+      <FadeInSection id="problem" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-ink text-center mb-14">
+          <h2 className="text-3xl font-bold text-white text-center mb-14">
             지금 연수원에서는 매일 이런 일이 반복됩니다
           </h2>
           <div className="grid grid-cols-3 gap-6 mb-14">
@@ -302,20 +318,20 @@ export default function App() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-100"
+                className="bg-card rounded-2xl p-6 ring-1 ring-white/10"
               >
                 <div className="flex items-start justify-between mb-4">
                   <span className="text-3xl">{p.emoji}</span>
-                  <span className="bg-red-50 text-red-600 text-xs font-bold px-2.5 py-1 rounded-full">
+                  <span className="bg-red-500/10 text-red-400 text-xs font-bold px-2.5 py-1 rounded-full">
                     {p.hours}
                   </span>
                 </div>
-                <div className="text-base font-bold text-ink mb-1">{p.title}</div>
+                <div className="text-base font-bold text-white mb-1">{p.title}</div>
                 <div className="text-sm text-subtext leading-relaxed">{p.desc}</div>
               </motion.div>
             ))}
           </div>
-          <div className="bg-primaryDark rounded-2xl px-8 py-6 text-center">
+          <div className="bg-primaryDark rounded-2xl px-8 py-6 text-center ring-1 ring-white/10">
             <span className="text-white text-lg font-semibold">
               과정 1개당 16시간 × 연간 106개 = <span className="text-gold">연간 1,400시간 낭비</span>
             </span>
@@ -324,27 +340,27 @@ export default function App() {
       </FadeInSection>
 
       {/* 3. Solution */}
-      <FadeInSection id="solution" className="bg-white py-24 px-6">
+      <FadeInSection id="solution" className="bg-surface py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-ink text-center mb-14">
+          <h2 className="text-3xl font-bold text-white text-center mb-14">
             Smart Campus DX 3가지 핵심 서비스
           </h2>
           <div className="grid grid-cols-3 gap-8">
             {SOLUTIONS.map((s) => (
               <div
                 key={s.title}
-                className="bg-white rounded-2xl p-8 ring-1 ring-slate-200 hover:ring-2 hover:ring-primary hover:-translate-y-2 transition-all duration-300"
+                className="bg-card rounded-2xl p-8 ring-1 ring-white/10 hover:ring-2 hover:ring-primary hover:-translate-y-2 transition-all duration-300"
               >
                 <div className="text-4xl mb-5">{s.icon}</div>
-                <div className="text-xl font-bold text-ink mb-3">{s.title}</div>
+                <div className="text-xl font-bold text-white mb-3">{s.title}</div>
                 <p className="text-sm text-subtext leading-relaxed mb-6">{s.desc}</p>
                 <div className="flex flex-wrap items-center gap-2">
                   {s.steps.map((step, i) => (
                     <React.Fragment key={step}>
-                      <span className="text-xs font-medium text-primary bg-blue-50 px-2.5 py-1 rounded-full">
+                      <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full">
                         {step}
                       </span>
-                      {i < s.steps.length - 1 && <span className="text-slate-300 text-xs">→</span>}
+                      {i < s.steps.length - 1 && <span className="text-slate-600 text-xs">→</span>}
                     </React.Fragment>
                   ))}
                 </div>
@@ -395,10 +411,10 @@ export default function App() {
       </FadeInSection>
 
       {/* 5. Stats */}
-      <FadeInSection id="stats" className="bg-white py-24 px-6">
+      <FadeInSection id="stats" className="bg-surface py-24 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-4 gap-6">
           {STATS.map((s) => (
-            <div key={s.label} className="bg-[#F8FAFC] rounded-2xl p-8 text-center ring-1 ring-slate-100">
+            <div key={s.label} className="bg-card rounded-2xl p-8 text-center ring-1 ring-white/10">
               <CountUpNumber target={s.value} suffix={s.suffix} />
               <div className="text-sm text-subtext font-medium mt-3">{s.label}</div>
             </div>
@@ -407,22 +423,22 @@ export default function App() {
       </FadeInSection>
 
       {/* 6. Paperless Synergy */}
-      <FadeInSection id="synergy" className="bg-[#F8FAFC] py-24 px-6">
+      <FadeInSection id="synergy" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-ink text-center mb-14">
+          <h2 className="text-3xl font-bold text-white text-center mb-14">
             페이퍼리스 사업과 함께하면 더 강력합니다
           </h2>
           <div className="relative grid grid-cols-2 gap-8">
-            <div className="bg-white rounded-2xl p-8 ring-1 ring-slate-200">
+            <div className="bg-card rounded-2xl p-8 ring-1 ring-white/10">
               <div className="text-3xl mb-4">📄</div>
-              <div className="text-lg font-bold text-ink mb-2">페이퍼리스 사업</div>
+              <div className="text-lg font-bold text-white mb-2">페이퍼리스 사업</div>
               <div className="text-sm text-subtext leading-relaxed">
                 전 교육생 아이패드 지급으로 종이 교재를 디지털로 전환합니다.
               </div>
             </div>
-            <div className="bg-white rounded-2xl p-8 ring-1 ring-slate-200">
+            <div className="bg-card rounded-2xl p-8 ring-1 ring-white/10">
               <div className="text-3xl mb-4">🚀</div>
-              <div className="text-lg font-bold text-ink mb-2">Smart Campus DX</div>
+              <div className="text-lg font-bold text-white mb-2">Smart Campus DX</div>
               <div className="text-sm text-subtext leading-relaxed">
                 버스·객실·일정·출결까지 연수원 운영 전 과정을 자동화합니다.
               </div>
@@ -440,9 +456,9 @@ export default function App() {
       </FadeInSection>
 
       {/* 7. Roadmap */}
-      <FadeInSection id="roadmap" className="bg-white py-24 px-6">
+      <FadeInSection id="roadmap" className="bg-surface py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-ink text-center mb-14">3개년 단계별 추진 로드맵</h2>
+          <h2 className="text-3xl font-bold text-white text-center mb-14">3개년 단계별 추진 로드맵</h2>
           <div className="grid grid-cols-3 gap-6">
             {ROADMAP.map((r) => (
               <div key={r.year} className={`rounded-2xl p-7 ${r.bg}`}>
@@ -462,10 +478,10 @@ export default function App() {
       </FadeInSection>
 
       {/* 8. FAQ */}
-      <FadeInSection id="faq" className="bg-[#F8FAFC] py-24 px-6">
+      <FadeInSection id="faq" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-ink text-center mb-14">자주 묻는 질문</h2>
-          <div className="bg-white rounded-2xl px-8 ring-1 ring-slate-100">
+          <h2 className="text-3xl font-bold text-white text-center mb-14">자주 묻는 질문</h2>
+          <div className="bg-card rounded-2xl px-8 ring-1 ring-white/10">
             {FAQS.map((f) => (
               <FaqItem key={f.q} {...f} />
             ))}
@@ -487,7 +503,7 @@ export default function App() {
         <p className="text-slate-300 text-sm">연수원 운영의 디지털 전환, 함께 만들어갑니다</p>
       </FadeInSection>
 
-      <footer className="bg-white py-8 text-center text-xs text-subtext border-t border-slate-100">
+      <footer className="bg-surface py-8 text-center text-xs text-subtext border-t border-white/10">
         © 2026 Smart Campus DX
       </footer>
     </div>
