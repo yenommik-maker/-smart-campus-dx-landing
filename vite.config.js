@@ -11,7 +11,7 @@ export default defineConfig({
       manifest: {
         name: "스마트 캠퍼스 DX",
         short_name: "Smart Campus DX",
-        description: "공공기관 연수원 운영 디지털 전환 플랫폼 소개",
+        description: "공공기관 인재개발원 운영 디지털 전환 플랫폼 소개",
         start_url: "/-smart-campus-dx-landing/",
         scope: "/-smart-campus-dx-landing/",
         display: "standalone",

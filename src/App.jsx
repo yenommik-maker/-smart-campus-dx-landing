@@ -63,12 +63,12 @@ const ROADMAP = [
   {
     year: "2026",
     bg: "bg-primary",
-    items: ["Smart Bus 파일럿 도입", "Smart Room 시범운영", "교육생 앱 베타 출시", "1개 연수원 적용"],
+    items: ["Smart Bus 파일럿 도입", "Smart Room 시범운영", "교육생 앱 베타 출시", "1개 인재개발원 적용"],
   },
   {
     year: "2027",
     bg: "bg-primaryDark",
-    items: ["Smart Schedule 전면 도입", "페이퍼리스 사업 연계 확대", "전 연수원으로 확산", "운영 데이터 대시보드 구축"],
+    items: ["Smart Schedule 전면 도입", "페이퍼리스 사업 연계 확대", "전 인재개발원으로 확산", "운영 데이터 대시보드 구축"],
   },
   {
     year: "2028",
@@ -84,7 +84,7 @@ const FAQS = [
   },
   {
     q: "예산은 얼마나 필요한가요?",
-    a: "단계별 파일럿 도입을 전제로 최소 비용으로 시작할 수 있습니다. 정확한 규모는 연수원 운영 현황 파악 후 별도 협의가 필요합니다.",
+    a: "단계별 파일럿 도입을 전제로 최소 비용으로 시작할 수 있습니다. 정확한 규모는 인재개발원 운영 현황 파악 후 별도 협의가 필요합니다.",
   },
   {
     q: "교육생 기기가 없으면 어떻게 하나요?",
@@ -108,7 +108,7 @@ function IPadMesh({ position = [0, 0, 0], scale = 1, rotationSpeed = 0.15 }) {
       </RoundedBox>
       <mesh position={[0, 0, 0.075]}>
         <planeGeometry args={[1.92, 2.72]} />
-        <meshStandardMaterial color="#2563EB" roughness={0.15} metalness={0.1} />
+        <meshStandardMaterial color="#050507" roughness={0.05} metalness={0.4} />
       </mesh>
     </group>
   );
@@ -126,7 +126,7 @@ function PhoneMesh({ position = [0, 0, 0], scale = 1, rotationSpeed = 0.15 }) {
       </RoundedBox>
       <mesh position={[0, 0, 0.065]}>
         <planeGeometry args={[0.9, 1.9]} />
-        <meshStandardMaterial color="#2563EB" roughness={0.15} metalness={0.1} />
+        <meshStandardMaterial color="#050507" roughness={0.05} metalness={0.4} />
       </mesh>
     </group>
   );
@@ -265,10 +265,10 @@ export default function App() {
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
             <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full mb-6 ring-1 ring-primary/20">
-              ✨ 공공기관 연수원 디지털 전환
+              ✨ 공공기관 인재개발원 디지털 전환
             </div>
             <h1 className="text-5xl font-bold text-white leading-[1.25] mb-6">
-              연수원 운영,
+              인재개발원 운영,
               <br />
               이제 스스로 돌아갑니다
             </h1>
@@ -308,7 +308,7 @@ export default function App() {
       <FadeInSection id="problem" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-white text-center mb-14">
-            지금 연수원에서는 매일 이런 일이 반복됩니다
+            지금 인재개발원에서는 매일 이런 일이 반복됩니다
           </h2>
           <div className="grid grid-cols-3 gap-6 mb-14">
             {PROBLEMS.map((p, i) => (
@@ -440,7 +440,7 @@ export default function App() {
               <div className="text-3xl mb-4">🚀</div>
               <div className="text-lg font-bold text-white mb-2">Smart Campus DX</div>
               <div className="text-sm text-subtext leading-relaxed">
-                버스·객실·일정·출결까지 연수원 운영 전 과정을 자동화합니다.
+                버스·객실·일정·출결까지 인재개발원 운영 전 과정을 자동화합니다.
               </div>
             </div>
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
@@ -500,7 +500,7 @@ export default function App() {
         >
           프로토타입 시연하기
         </a>
-        <p className="text-slate-300 text-sm">연수원 운영의 디지털 전환, 함께 만들어갑니다</p>
+        <p className="text-slate-300 text-sm">인재개발원 운영의 디지털 전환, 함께 만들어갑니다</p>
       </FadeInSection>
 
       <footer className="bg-surface py-8 text-center text-xs text-subtext border-t border-white/10">
