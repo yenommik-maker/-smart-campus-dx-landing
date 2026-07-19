@@ -206,15 +206,18 @@ function CountUpNumber({ target, suffix = "" }) {
   );
 }
 
-function FaqItem({ q, a }) {
+function FaqItem({ index, q, a }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-white/10 last:border-b-0 py-5">
+    <div className="border-b border-white/10 last:border-b-0 py-6">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between text-left gap-4"
+        className="w-full flex items-center gap-5 text-left"
       >
-        <span className="text-base font-semibold text-ink">{q}</span>
+        <span className="w-10 shrink-0 font-mono text-xs text-primary">
+          /{String(index + 1).padStart(2, "0")}
+        </span>
+        <span className="flex-1 text-base font-semibold text-ink">{q}</span>
         <span
           className={`shrink-0 text-xl text-primary font-light transition-transform duration-300 ${open ? "rotate-45" : ""}`}
         >
@@ -230,7 +233,7 @@ function FaqItem({ q, a }) {
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="overflow-hidden"
           >
-            <p className="pt-3 text-sm text-subtext leading-relaxed">{a}</p>
+            <p className="pt-3 pl-10 text-sm text-subtext leading-relaxed">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -541,9 +544,13 @@ export default function App() {
       {/* 2. Problem */}
       <FadeInSection id="problem" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-14">
-            지금 인재개발원에서는 매일 이런 일이 반복됩니다
-          </h2>
+          <div className="mb-14">
+            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">THE PROBLEM</div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
+              <RevealLine text="지금 반복되는" />
+              <RevealLine text="업무들" delay={0.1} />
+            </h2>
+          </div>
           <div className="grid grid-cols-3 gap-6 mb-14">
             {PROBLEMS.map((p, i) => (
               <motion.div
@@ -555,18 +562,20 @@ export default function App() {
                 className="bg-card rounded-2xl p-6 ring-1 ring-white/10"
               >
                 <div className="flex items-start justify-between mb-4">
-                  <span className="text-3xl">{p.emoji}</span>
+                  <span className="font-mono text-xs text-primary">/{String(i + 1).padStart(2, "0")}</span>
                   <span className="bg-red-500/10 text-red-400 text-xs font-bold px-2.5 py-1 rounded-full">
                     {p.hours}
                   </span>
                 </div>
+                <div className="text-3xl mb-3">{p.emoji}</div>
                 <div className="text-base font-bold text-white mb-1">{p.title}</div>
                 <div className="text-sm text-subtext leading-relaxed">{p.desc}</div>
               </motion.div>
             ))}
           </div>
-          <div className="bg-primaryDark rounded-2xl px-8 py-6 text-center ring-1 ring-white/10">
-            <span className="text-white text-lg font-semibold">
+          <div className="relative overflow-hidden rounded-2xl bg-primaryDark px-8 py-8 text-center ring-1 ring-white/10">
+            <div className="pointer-events-none absolute -top-16 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-gold/20 blur-[100px]" />
+            <span className="relative text-white text-lg font-semibold">
               과정 1개당 16시간 × 연간 106개 = <span className="text-gold">연간 1,400시간 낭비</span>
             </span>
           </div>
@@ -580,29 +589,33 @@ export default function App() {
       <FadeInSection id="devices" className="bg-primaryDark py-24 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-3xl font-bold text-white leading-[1.3] mb-6">
-              교육생은 아이패드 하나로
-              <br />
-              모든 것을
+            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">ONE DEVICE</div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1] mb-6">
+              <RevealLine text="아이패드 하나로" />
+              <RevealLine text="모든 것을" delay={0.1} />
             </h2>
             <p className="text-slate-300 text-base leading-relaxed mb-10">
               버스 예약부터 출결까지, 흩어져 있던 연수 과정 전체를
               <br />
               하나의 화면 안에서 끝냅니다.
             </p>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="flex flex-wrap gap-2">
               {DEVICE_FEATURES.map((f) => (
-                <div key={f.label} className="text-center">
-                  <div className="w-14 h-14 mx-auto mb-2 rounded-xl bg-white/10 flex items-center justify-center text-2xl">
-                    {f.icon}
-                  </div>
-                  <div className="text-xs text-slate-300 font-medium">{f.label}</div>
+                <div
+                  key={f.label}
+                  className="flex items-center gap-2 rounded-full bg-white/5 ring-1 ring-white/10 px-4 py-2"
+                >
+                  <span className="text-lg">{f.icon}</span>
+                  <span className="text-xs font-medium text-slate-200">{f.label}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="w-full h-[420px]">
+          <div className="relative w-full h-[420px]">
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="h-72 w-72 rounded-full bg-primary/20 blur-[100px]" />
+            </div>
             <Canvas camera={{ position: [0, 0, 7], fov: 35 }}>
               <SceneLights />
               <Float speed={1.2} rotationIntensity={0.15} floatIntensity={0.6}>
@@ -640,9 +653,13 @@ export default function App() {
       {/* 6. Paperless Synergy */}
       <FadeInSection id="synergy" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-14">
-            페이퍼리스 사업과 함께하면 더 강력합니다
-          </h2>
+          <div className="mb-14">
+            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">SYNERGY</div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
+              <RevealLine text="페이퍼리스와 함께면" />
+              <RevealLine text="더 강력합니다" delay={0.1} />
+            </h2>
+          </div>
           <div className="relative grid grid-cols-2 gap-8">
             <div className="bg-card rounded-2xl p-8 ring-1 ring-white/10">
               <div className="text-3xl mb-4">📄</div>
@@ -658,8 +675,11 @@ export default function App() {
                 버스·객실·일정·출결까지 인재개발원 운영 전 과정을 자동화합니다.
               </div>
             </div>
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
-              × 시너지
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="pointer-events-none absolute inset-0 -z-10 rounded-full bg-primary/40 blur-2xl" />
+              <div className="relative bg-primary text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
+                × 시너지
+              </div>
             </div>
           </div>
           <div className="mt-10 bg-gold rounded-2xl px-8 py-6 text-center">
@@ -676,10 +696,16 @@ export default function App() {
       {/* 8. FAQ */}
       <FadeInSection id="faq" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-14">자주 묻는 질문</h2>
+          <div className="mb-14">
+            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">FAQ</div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
+              <RevealLine text="자주 묻는" />
+              <RevealLine text="질문" delay={0.1} />
+            </h2>
+          </div>
           <div className="bg-card rounded-2xl px-8 ring-1 ring-white/10">
-            {FAQS.map((f) => (
-              <FaqItem key={f.q} {...f} />
+            {FAQS.map((f, i) => (
+              <FaqItem key={f.q} index={i} {...f} />
             ))}
           </div>
         </div>
