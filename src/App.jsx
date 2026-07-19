@@ -77,6 +77,9 @@ const ROADMAP = [
   },
 ];
 
+const TICKER_ITEMS = ["Smart Bus", "Smart Room", "Smart Schedule", "Smart Access", "Smart Campus DX"];
+const WE_DO = ["Smart Bus", "Smart Room", "Smart Schedule"];
+
 const FAQS = [
   {
     q: "기존 내부 시스템과 충돌하지 않나요?",
@@ -196,7 +199,7 @@ function CountUpNumber({ target, suffix = "" }) {
   }, [inView, target]);
 
   return (
-    <span ref={ref} className="text-5xl font-bold text-white">
+    <span ref={ref} className="text-5xl md:text-6xl font-bold text-white whitespace-nowrap">
       {display.toLocaleString()}
       {suffix}
     </span>
@@ -235,6 +238,223 @@ function FaqItem({ q, a }) {
   );
 }
 
+function RevealLine({ text, delay = 0, className = "" }) {
+  return (
+    <span className={`block overflow-hidden ${className}`}>
+      <motion.span
+        className="block"
+        initial={{ y: "110%" }}
+        animate={{ y: "0%" }}
+        transition={{ duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {text}
+      </motion.span>
+    </span>
+  );
+}
+
+function FloatingCard() {
+  return (
+    <motion.a
+      href={PROTOTYPE_URL}
+      target="_blank"
+      rel="noreferrer"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: [0, -8, 0] }}
+      transition={{
+        opacity: { duration: 0.6, delay: 0.6 },
+        y: { duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+      }}
+      className="hidden sm:flex items-center gap-3 bg-card/90 backdrop-blur-md ring-1 ring-white/10 rounded-2xl pl-3 pr-4 py-3 shadow-xl hover:ring-primary/50 transition-colors"
+    >
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary text-lg">
+        🚀
+      </span>
+      <span className="text-left">
+        <span className="block text-[11px] text-subtext">클릭형 데모</span>
+        <span className="block text-sm font-bold text-white">프로토타입 바로가기 →</span>
+      </span>
+    </motion.a>
+  );
+}
+
+function WeDoRow() {
+  return (
+    <div className="border-t border-white/10 pt-5 md:max-w-xs">
+      <div className="text-xs font-semibold tracking-[0.2em] text-primary mb-2">WE DO</div>
+      <div className="flex flex-wrap gap-x-1 gap-y-1">
+        {WE_DO.map((w, i) => (
+          <span key={w} className="text-sm text-subtext">
+            {w}
+            {i < WE_DO.length - 1 && <span className="mx-3 text-white/20">/</span>}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MarqueeTicker() {
+  const loop = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
+  return (
+    <div className="relative z-10 overflow-hidden border-y border-white/10 bg-surfaceAlt py-6">
+      <motion.div
+        className="flex w-max gap-12 whitespace-nowrap"
+        animate={{ x: ["0%", "-33.3333%"] }}
+        transition={{ duration: 24, repeat: Infinity, ease: "linear" }}
+      >
+        {loop.map((t, i) => (
+          <span
+            key={i}
+            className="flex items-center gap-12 text-2xl md:text-3xl font-bold tracking-tight text-white/25"
+          >
+            {t}
+            <span className="text-primary/40">✦</span>
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+function ServiceRow({ index, item, active, onEnter, onLeave }) {
+  return (
+    <div
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+      className="group relative border-b border-white/10 py-8 first:pt-0 last:border-b-0"
+    >
+      <div className="flex items-start gap-8">
+        <span className="w-12 shrink-0 pt-1 font-mono text-sm text-primary">
+          /{String(index + 1).padStart(2, "0")}
+        </span>
+        <div className="flex-1">
+          <div className="text-2xl font-bold text-white transition-colors group-hover:text-primary">
+            {item.title}
+          </div>
+          <p className="mt-2 max-w-lg text-sm leading-relaxed text-subtext">{item.desc}</p>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            {item.steps.map((step, i) => (
+              <React.Fragment key={step}>
+                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+                  {step}
+                </span>
+                {i < item.steps.length - 1 && <span className="text-xs text-slate-600">→</span>}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </div>
+      <AnimatePresence>
+        {active && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.85, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.85, x: 20 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="pointer-events-none absolute right-8 top-1/2 hidden h-24 w-24 -translate-y-1/2 items-center justify-center rounded-3xl bg-primary/15 text-5xl ring-1 ring-primary/30 backdrop-blur-sm md:flex"
+          >
+            {item.icon}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function ServicesSection() {
+  const [hovered, setHovered] = useState(null);
+  return (
+    <FadeInSection id="solution" className="bg-surface py-24 px-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-14">
+          <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">WHAT WE DO</div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
+            <RevealLine text="무엇을" />
+            <RevealLine text="자동화하나요" delay={0.1} />
+          </h2>
+          <p className="mt-4 text-sm text-subtext">Smart Campus DX 3가지 핵심 서비스</p>
+        </div>
+        <div>
+          {SOLUTIONS.map((s, i) => (
+            <ServiceRow
+              key={s.title}
+              index={i}
+              item={s}
+              active={hovered === i}
+              onEnter={() => setHovered(i)}
+              onLeave={() => setHovered(null)}
+            />
+          ))}
+        </div>
+      </div>
+    </FadeInSection>
+  );
+}
+
+function ProcessAccordion() {
+  const [openIndex, setOpenIndex] = useState(0);
+  return (
+    <FadeInSection id="roadmap" className="bg-surface py-24 px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-14">
+          <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">ROADMAP</div>
+          <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
+            <RevealLine text="3개년 단계별" />
+            <RevealLine text="추진 로드맵" delay={0.1} />
+          </h2>
+        </div>
+        <div className="border-t border-white/10">
+          {ROADMAP.map((r, i) => {
+            const open = openIndex === i;
+            return (
+              <div key={r.year} className="border-b border-white/10">
+                <button
+                  onClick={() => setOpenIndex(open ? -1 : i)}
+                  className="group flex w-full items-center gap-6 py-7 text-left"
+                >
+                  <span className="w-12 shrink-0 font-mono text-sm text-primary">
+                    /{String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${r.bg}`} />
+                  <span className="flex-1 text-2xl md:text-3xl font-bold text-white transition-colors group-hover:text-primary">
+                    {r.year}년
+                  </span>
+                  <span
+                    className={`shrink-0 text-2xl font-light text-primary transition-transform duration-300 ${open ? "rotate-45" : ""}`}
+                  >
+                    +
+                  </span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {open && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
+                      className="overflow-hidden"
+                    >
+                      <ul className="space-y-3 pb-8 pl-[4.5rem]">
+                        {r.items.map((item) => (
+                          <li key={item} className="flex items-start gap-2 text-sm leading-relaxed text-subtext">
+                            <span className="mt-0.5 text-primary">✓</span>
+                            {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </FadeInSection>
+  );
+}
+
 export default function App() {
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({
@@ -248,7 +468,7 @@ export default function App() {
       <Navbar />
 
       {/* 1. Hero */}
-      <section ref={heroRef} className="relative pt-40 pb-24 px-6 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen pt-32 pb-10 px-6 overflow-hidden flex flex-col">
         <motion.div className="absolute inset-0 z-0" style={{ y: heroBgY }}>
           <div
             className="absolute inset-0 scale-110 bg-cover bg-center blur-[2px]"
@@ -258,51 +478,65 @@ export default function App() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-surface" />
         </motion.div>
 
-        <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-          >
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full mb-6 ring-1 ring-primary/20">
+        <div className="relative z-10 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between">
+          <div className="flex items-start justify-between gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full ring-1 ring-primary/20"
+            >
               ✨ 공공기관 인재개발원 디지털 전환
-            </div>
-            <h1 className="text-5xl font-bold text-white leading-[1.25] mb-6">
-              인재개발원 운영,
-              <br />
-              이제 스스로 돌아갑니다
-            </h1>
-            <p className="text-lg text-subtext leading-relaxed mb-10">
-              연간 1,400시간의 반복업무를 자동화하고
-              <br />
-              교육생 중심의 스마트 캠퍼스를 구축합니다
-            </p>
-            <div className="flex items-center gap-4">
-              <a
-                href={PROTOTYPE_URL}
-                target="_blank"
-                rel="noreferrer"
-                className="bg-primary text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-blue-600 transition-colors"
-              >
-                프로토타입 보기
-              </a>
-              <a
-                href="#problem"
-                className="border border-white/20 text-ink font-semibold px-6 py-3.5 rounded-xl hover:border-primary hover:text-primary transition-colors"
-              >
-                자세히 알아보기
-              </a>
-            </div>
-          </motion.div>
+            </motion.div>
+            <FloatingCard />
+          </div>
 
-          <div className="w-full h-[480px]">
-            <Canvas camera={{ position: [0, 0, 6], fov: 35 }}>
-              <SceneLights />
-              <IPadMesh position={[0, -0.1, 0]} rotationSpeed={0.15} />
-            </Canvas>
+          <h1 className="my-10 text-6xl md:text-8xl font-bold text-white leading-[0.95]">
+            <RevealLine text="인재개발원 운영," />
+            <RevealLine text="스스로 돌아갑니다" delay={0.12} />
+          </h1>
+
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="max-w-md"
+            >
+              <p className="text-lg text-subtext leading-relaxed mb-8">
+                연간 1,400시간의 반복업무를 자동화하고
+                <br />
+                교육생 중심의 스마트 캠퍼스를 구축합니다
+              </p>
+              <div className="flex items-center gap-4">
+                <a
+                  href={PROTOTYPE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-primary text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-blue-600 transition-colors"
+                >
+                  프로토타입 보기
+                </a>
+                <a
+                  href="#problem"
+                  className="border border-white/20 text-ink font-semibold px-6 py-3.5 rounded-xl hover:border-primary hover:text-primary transition-colors"
+                >
+                  자세히 알아보기
+                </a>
+              </div>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.65 }}
+            >
+              <WeDoRow />
+            </motion.div>
           </div>
         </div>
       </section>
+
+      <MarqueeTicker />
 
       {/* 2. Problem */}
       <FadeInSection id="problem" className="bg-surfaceAlt py-24 px-6">
@@ -340,35 +574,7 @@ export default function App() {
       </FadeInSection>
 
       {/* 3. Solution */}
-      <FadeInSection id="solution" className="bg-surface py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-14">
-            Smart Campus DX 3가지 핵심 서비스
-          </h2>
-          <div className="grid grid-cols-3 gap-8">
-            {SOLUTIONS.map((s) => (
-              <div
-                key={s.title}
-                className="bg-card rounded-2xl p-8 ring-1 ring-white/10 hover:ring-2 hover:ring-primary hover:-translate-y-2 transition-all duration-300"
-              >
-                <div className="text-4xl mb-5">{s.icon}</div>
-                <div className="text-xl font-bold text-white mb-3">{s.title}</div>
-                <p className="text-sm text-subtext leading-relaxed mb-6">{s.desc}</p>
-                <div className="flex flex-wrap items-center gap-2">
-                  {s.steps.map((step, i) => (
-                    <React.Fragment key={step}>
-                      <span className="text-xs font-medium text-primary bg-primary/10 px-2.5 py-1 rounded-full">
-                        {step}
-                      </span>
-                      {i < s.steps.length - 1 && <span className="text-slate-600 text-xs">→</span>}
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </FadeInSection>
+      <ServicesSection />
 
       {/* 4. Device Mockup */}
       <FadeInSection id="devices" className="bg-primaryDark py-24 px-6">
@@ -412,13 +618,22 @@ export default function App() {
 
       {/* 5. Stats */}
       <FadeInSection id="stats" className="bg-surface py-24 px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-4 gap-6">
-          {STATS.map((s) => (
-            <div key={s.label} className="bg-card rounded-2xl p-8 text-center ring-1 ring-white/10">
-              <CountUpNumber target={s.value} suffix={s.suffix} />
-              <div className="text-sm text-subtext font-medium mt-3">{s.label}</div>
-            </div>
-          ))}
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-14">
+            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">BY THE NUMBERS</div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
+              <RevealLine text="숫자로 보는" />
+              <RevealLine text="변화" delay={0.1} />
+            </h2>
+          </div>
+          <div className="grid grid-cols-4 divide-x divide-white/10 border-y border-white/10">
+            {STATS.map((s) => (
+              <div key={s.label} className="px-6 py-10 text-center first:pl-0 last:pr-0">
+                <CountUpNumber target={s.value} suffix={s.suffix} />
+                <div className="text-sm text-subtext font-medium mt-3">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </FadeInSection>
 
@@ -456,26 +671,7 @@ export default function App() {
       </FadeInSection>
 
       {/* 7. Roadmap */}
-      <FadeInSection id="roadmap" className="bg-surface py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-14">3개년 단계별 추진 로드맵</h2>
-          <div className="grid grid-cols-3 gap-6">
-            {ROADMAP.map((r) => (
-              <div key={r.year} className={`rounded-2xl p-7 ${r.bg}`}>
-                <div className="text-white text-2xl font-bold mb-5">{r.year}</div>
-                <ul className="space-y-3">
-                  {r.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2 text-white/90 text-sm leading-relaxed">
-                      <span className="mt-0.5">✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </FadeInSection>
+      <ProcessAccordion />
 
       {/* 8. FAQ */}
       <FadeInSection id="faq" className="bg-surfaceAlt py-24 px-6">
@@ -490,17 +686,21 @@ export default function App() {
       </FadeInSection>
 
       {/* 9. CTA */}
-      <FadeInSection className="bg-primaryDark py-28 px-6 text-center">
-        <h2 className="text-4xl font-bold text-white mb-6">스마트 캠퍼스 DX, 지금 시작하세요</h2>
-        <a
-          href={PROTOTYPE_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-block bg-gold text-white font-bold px-8 py-4 rounded-xl hover:brightness-110 transition-all mb-6"
-        >
-          프로토타입 시연하기
-        </a>
-        <p className="text-slate-300 text-sm">인재개발원 운영의 디지털 전환, 함께 만들어갑니다</p>
+      <FadeInSection className="relative bg-primaryDark py-28 px-6 text-center overflow-hidden">
+        <div className="pointer-events-none absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-primary/30 blur-[120px]" />
+        <div className="pointer-events-none absolute bottom-0 right-1/4 h-[300px] w-[300px] rounded-full bg-gold/20 blur-[100px]" />
+        <div className="relative z-10">
+          <h2 className="text-4xl font-bold text-white mb-6">스마트 캠퍼스 DX, 지금 시작하세요</h2>
+          <a
+            href={PROTOTYPE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-block bg-gold text-white font-bold px-8 py-4 rounded-xl hover:brightness-110 transition-all mb-6"
+          >
+            프로토타입 시연하기
+          </a>
+          <p className="text-slate-300 text-sm">인재개발원 운영의 디지털 전환, 함께 만들어갑니다</p>
+        </div>
       </FadeInSection>
 
       <footer className="bg-surface py-8 text-center text-xs text-subtext border-t border-white/10">
