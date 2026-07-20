@@ -149,19 +149,27 @@ function Navbar() {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-md border-b border-white/10">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-6 py-4">
-        <a href="#top" className="text-lg font-bold text-white tracking-tight">
-          Smart Campus DX
+        <a href="#top" className="text-sm font-black uppercase tracking-[0.15em] text-white">
+          Smart Campus DX<span className="text-primary">®</span>
         </a>
-        <div className="flex items-center gap-7">
+        <div className="flex items-center gap-6">
           {NAV_LINKS.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="text-sm font-medium text-subtext hover:text-primary transition-colors"
+              className="text-xs font-semibold text-subtext hover:text-white transition-colors"
             >
               {l.label}
             </a>
           ))}
+          <a
+            href={PROTOTYPE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full bg-white text-surface text-xs font-bold px-4 py-2 hover:bg-primary hover:text-white transition-colors"
+          >
+            프로토타입 ↗
+          </a>
         </div>
       </div>
     </nav>
@@ -253,6 +261,23 @@ function RevealLine({ text, delay = 0, className = "" }) {
         {text}
       </motion.span>
     </span>
+  );
+}
+
+function SectionHeader({ index, label, lines, sub }) {
+  return (
+    <div className="mb-14 border-t border-white/10 pt-6">
+      <div className="mb-8 flex items-center justify-between">
+        <span className="font-mono text-xs text-subtext">( {String(index).padStart(2, "0")} )</span>
+        <span className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">{label}</span>
+      </div>
+      <h2 className="text-4xl md:text-6xl font-black tracking-tight text-white leading-[1.02]">
+        {lines.map((line, i) => (
+          <RevealLine key={line} text={line} delay={i * 0.1} />
+        ))}
+      </h2>
+      {sub && <p className="mt-5 max-w-md text-sm text-subtext">{sub}</p>}
+    </div>
   );
 }
 
@@ -370,14 +395,12 @@ function ServicesSection() {
   return (
     <FadeInSection id="solution" className="bg-surface py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        <div className="mb-14">
-          <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">WHAT WE DO</div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
-            <RevealLine text="무엇을" />
-            <RevealLine text="자동화하나요" delay={0.1} />
-          </h2>
-          <p className="mt-4 text-sm text-subtext">Smart Campus DX 3가지 핵심 서비스</p>
-        </div>
+        <SectionHeader
+          index={2}
+          label="What We Do"
+          lines={["무엇을", "자동화하나요"]}
+          sub="Smart Campus DX 3가지 핵심 서비스"
+        />
         <div>
           {SOLUTIONS.map((s, i) => (
             <ServiceRow
@@ -400,13 +423,7 @@ function ProcessAccordion() {
   return (
     <FadeInSection id="roadmap" className="bg-surface py-24 px-6">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-14">
-          <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">ROADMAP</div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
-            <RevealLine text="3개년 단계별" />
-            <RevealLine text="추진 로드맵" delay={0.1} />
-          </h2>
-        </div>
+        <SectionHeader index={6} label="Roadmap" lines={["3개년 단계별", "추진 로드맵"]} />
         <div className="border-t border-white/10">
           {ROADMAP.map((r, i) => {
             const open = openIndex === i;
@@ -482,59 +499,73 @@ export default function App() {
         </motion.div>
 
         <div className="relative z-10 max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between">
-          <div className="flex items-start justify-between gap-6">
+          <div>
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2 bg-primary/10 text-primary text-xs font-semibold px-3 py-1.5 rounded-full ring-1 ring-primary/20"
+              className="flex items-start justify-between gap-6 border-b border-white/10 pb-5"
             >
-              ✨ 공공기관 인재개발원 디지털 전환
+              <div className="flex flex-wrap items-center gap-x-10 gap-y-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-subtext">
+                <span>공공기관 인재개발원</span>
+                <span className="hidden sm:inline">디지털 전환 플랫폼</span>
+                <span className="hidden md:inline text-primary">EST. 2026</span>
+              </div>
+              <FloatingCard />
             </motion.div>
-            <FloatingCard />
           </div>
 
-          <h1 className="my-10 text-6xl md:text-8xl font-bold text-white leading-[0.95]">
+          <h1 className="my-10 text-6xl md:text-8xl font-black tracking-tight text-white leading-[0.95]">
             <RevealLine text="인재개발원 운영," />
             <RevealLine text="스스로 돌아갑니다" delay={0.12} />
           </h1>
 
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="max-w-md"
-            >
-              <p className="text-lg text-subtext leading-relaxed mb-8">
-                연간 1,400시간의 반복업무를 자동화하고
-                <br />
-                교육생 중심의 스마트 캠퍼스를 구축합니다
-              </p>
-              <div className="flex items-center gap-4">
-                <a
-                  href={PROTOTYPE_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-primary text-white font-semibold px-6 py-3.5 rounded-xl hover:bg-blue-600 transition-colors"
+          <div>
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-10 border-t border-white/10 pt-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                className="max-w-md"
+              >
+                <p className="text-lg text-subtext leading-relaxed mb-8">
+                  연간 1,400시간의 반복업무를 자동화하고
+                  <br />
+                  교육생 중심의 스마트 캠퍼스를 구축합니다
+                </p>
+                <div className="flex items-center gap-4">
+                  <a
+                    href={PROTOTYPE_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-full bg-primary text-white font-semibold px-7 py-3.5 hover:bg-blue-600 transition-colors"
+                  >
+                    프로토타입 보기 ↗
+                  </a>
+                  <a
+                    href="#problem"
+                    className="rounded-full border border-white/20 text-ink font-semibold px-7 py-3.5 hover:border-primary hover:text-primary transition-colors"
+                  >
+                    자세히 알아보기
+                  </a>
+                </div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.65 }}
+                className="flex items-end gap-12"
+              >
+                <WeDoRow />
+                <motion.span
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="hidden md:block pb-1 text-xs font-semibold uppercase tracking-[0.25em] text-subtext"
                 >
-                  프로토타입 보기
-                </a>
-                <a
-                  href="#problem"
-                  className="border border-white/20 text-ink font-semibold px-6 py-3.5 rounded-xl hover:border-primary hover:text-primary transition-colors"
-                >
-                  자세히 알아보기
-                </a>
-              </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.65 }}
-            >
-              <WeDoRow />
-            </motion.div>
+                  Scroll ↓
+                </motion.span>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -544,36 +575,30 @@ export default function App() {
       {/* 2. Problem */}
       <FadeInSection id="problem" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-14">
-            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">THE PROBLEM</div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
-              <RevealLine text="지금 반복되는" />
-              <RevealLine text="업무들" delay={0.1} />
-            </h2>
-          </div>
-          <div className="grid grid-cols-3 gap-6 mb-14">
+          <SectionHeader index={1} label="The Problem" lines={["지금 반복되는", "업무들"]} />
+          <div className="mb-14 grid grid-cols-3 border border-white/10 divide-x divide-y divide-white/10 [&>*:nth-child(-n+3)]:border-t-0">
             {PROBLEMS.map((p, i) => (
               <motion.div
                 key={p.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="bg-card rounded-2xl p-6 ring-1 ring-white/10"
+                transition={{ duration: 0.5, delay: i * 0.06 }}
+                className="group relative p-7 transition-colors hover:bg-card"
               >
-                <div className="flex items-start justify-between mb-4">
-                  <span className="font-mono text-xs text-primary">/{String(i + 1).padStart(2, "0")}</span>
-                  <span className="bg-red-500/10 text-red-400 text-xs font-bold px-2.5 py-1 rounded-full">
-                    {p.hours}
+                <div className="mb-8 flex items-start justify-between">
+                  <span className="font-mono text-xs text-subtext">
+                    ( {String(i + 1).padStart(2, "0")} )
                   </span>
+                  <span className="font-mono text-2xl font-bold text-red-400/80">{p.hours}</span>
                 </div>
                 <div className="text-3xl mb-3">{p.emoji}</div>
-                <div className="text-base font-bold text-white mb-1">{p.title}</div>
+                <div className="text-lg font-bold text-white mb-1">{p.title}</div>
                 <div className="text-sm text-subtext leading-relaxed">{p.desc}</div>
               </motion.div>
             ))}
           </div>
-          <div className="relative overflow-hidden rounded-2xl bg-primaryDark px-8 py-8 text-center ring-1 ring-white/10">
+          <div className="relative overflow-hidden border border-white/10 px-8 py-8 text-center">
             <div className="pointer-events-none absolute -top-16 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-gold/20 blur-[100px]" />
             <span className="relative text-white text-lg font-semibold">
               과정 1개당 16시간 × 연간 106개 = <span className="text-gold">연간 1,400시간 낭비</span>
@@ -589,8 +614,11 @@ export default function App() {
       <FadeInSection id="devices" className="bg-primaryDark py-24 px-6">
         <div className="max-w-6xl mx-auto grid grid-cols-2 gap-12 items-center">
           <div>
-            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">ONE DEVICE</div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1] mb-6">
+            <div className="mb-8 flex items-center justify-between border-t border-white/10 pt-6">
+              <span className="font-mono text-xs text-subtext">( 03 )</span>
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">One Device</span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-black tracking-tight text-white leading-[1.02] mb-6">
               <RevealLine text="아이패드 하나로" />
               <RevealLine text="모든 것을" delay={0.1} />
             </h2>
@@ -632,13 +660,7 @@ export default function App() {
       {/* 5. Stats */}
       <FadeInSection id="stats" className="bg-surface py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-14">
-            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">BY THE NUMBERS</div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
-              <RevealLine text="숫자로 보는" />
-              <RevealLine text="변화" delay={0.1} />
-            </h2>
-          </div>
+          <SectionHeader index={4} label="By the Numbers" lines={["숫자로 보는", "변화"]} />
           <div className="grid grid-cols-4 divide-x divide-white/10 border-y border-white/10">
             {STATS.map((s) => (
               <div key={s.label} className="px-6 py-10 text-center first:pl-0 last:pr-0">
@@ -653,23 +675,23 @@ export default function App() {
       {/* 6. Paperless Synergy */}
       <FadeInSection id="synergy" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-14">
-            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">SYNERGY</div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
-              <RevealLine text="페이퍼리스와 함께면" />
-              <RevealLine text="더 강력합니다" delay={0.1} />
-            </h2>
-          </div>
-          <div className="relative grid grid-cols-2 gap-8">
-            <div className="bg-card rounded-2xl p-8 ring-1 ring-white/10">
-              <div className="text-3xl mb-4">📄</div>
+          <SectionHeader index={5} label="Synergy" lines={["페이퍼리스와 함께면", "더 강력합니다"]} />
+          <div className="relative grid grid-cols-2 border border-white/10 divide-x divide-white/10">
+            <div className="p-8">
+              <div className="mb-8 flex items-start justify-between">
+                <span className="font-mono text-xs text-subtext">( A )</span>
+                <span className="text-3xl">📄</span>
+              </div>
               <div className="text-lg font-bold text-white mb-2">페이퍼리스 사업</div>
               <div className="text-sm text-subtext leading-relaxed">
                 전 교육생 아이패드 지급으로 종이 교재를 디지털로 전환합니다.
               </div>
             </div>
-            <div className="bg-card rounded-2xl p-8 ring-1 ring-white/10">
-              <div className="text-3xl mb-4">🚀</div>
+            <div className="p-8">
+              <div className="mb-8 flex items-start justify-between">
+                <span className="font-mono text-xs text-subtext">( B )</span>
+                <span className="text-3xl">🚀</span>
+              </div>
               <div className="text-lg font-bold text-white mb-2">Smart Campus DX</div>
               <div className="text-sm text-subtext leading-relaxed">
                 버스·객실·일정·출결까지 인재개발원 운영 전 과정을 자동화합니다.
@@ -682,8 +704,8 @@ export default function App() {
               </div>
             </div>
           </div>
-          <div className="mt-10 bg-gold rounded-2xl px-8 py-6 text-center">
-            <span className="text-white text-lg font-bold">
+          <div className="mt-10 border border-gold/40 bg-gold/10 px-8 py-6 text-center">
+            <span className="text-gold text-lg font-bold">
               아이패드 1대 = 교재 + 정보 + 버스 + 객실 + 출결
             </span>
           </div>
@@ -696,14 +718,8 @@ export default function App() {
       {/* 8. FAQ */}
       <FadeInSection id="faq" className="bg-surfaceAlt py-24 px-6">
         <div className="max-w-3xl mx-auto">
-          <div className="mb-14">
-            <div className="mb-3 text-xs font-semibold tracking-[0.2em] text-primary">FAQ</div>
-            <h2 className="text-4xl md:text-5xl font-bold text-white leading-[1.1]">
-              <RevealLine text="자주 묻는" />
-              <RevealLine text="질문" delay={0.1} />
-            </h2>
-          </div>
-          <div className="bg-card rounded-2xl px-8 ring-1 ring-white/10">
+          <SectionHeader index={7} label="FAQ" lines={["자주 묻는", "질문"]} />
+          <div className="border-t border-white/10">
             {FAQS.map((f, i) => (
               <FaqItem key={f.q} index={i} {...f} />
             ))}
@@ -712,25 +728,80 @@ export default function App() {
       </FadeInSection>
 
       {/* 9. CTA */}
-      <FadeInSection className="relative bg-primaryDark py-28 px-6 text-center overflow-hidden">
+      <FadeInSection className="relative bg-primaryDark py-32 px-6 text-center overflow-hidden">
         <div className="pointer-events-none absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-primary/30 blur-[120px]" />
         <div className="pointer-events-none absolute bottom-0 right-1/4 h-[300px] w-[300px] rounded-full bg-gold/20 blur-[100px]" />
-        <div className="relative z-10">
-          <h2 className="text-4xl font-bold text-white mb-6">스마트 캠퍼스 DX, 지금 시작하세요</h2>
+        <div className="relative z-10 max-w-4xl mx-auto">
+          <div className="mb-6 text-xs font-semibold uppercase tracking-[0.25em] text-primary">Get Started</div>
+          <h2 className="text-5xl md:text-6xl font-black tracking-tight text-white leading-[1.05] mb-10">
+            <RevealLine text="스마트 캠퍼스 DX," />
+            <RevealLine text="지금 시작하세요" delay={0.1} />
+          </h2>
           <a
             href={PROTOTYPE_URL}
             target="_blank"
             rel="noreferrer"
-            className="inline-block bg-gold text-white font-bold px-8 py-4 rounded-xl hover:brightness-110 transition-all mb-6"
+            className="inline-block rounded-full bg-gold text-white font-bold px-10 py-4 hover:brightness-110 transition-all mb-6"
           >
-            프로토타입 시연하기
+            프로토타입 시연하기 ↗
           </a>
           <p className="text-slate-300 text-sm">인재개발원 운영의 디지털 전환, 함께 만들어갑니다</p>
         </div>
       </FadeInSection>
 
-      <footer className="bg-surface py-8 text-center text-xs text-subtext border-t border-white/10">
-        © 2026 Smart Campus DX
+      <footer className="bg-surface border-t border-white/10 px-6 pt-16 overflow-hidden">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 pb-16">
+            <div className="max-w-xs">
+              <div className="text-sm font-black uppercase tracking-[0.15em] text-white mb-3">
+                Smart Campus DX<span className="text-primary">®</span>
+              </div>
+              <p className="text-xs text-subtext leading-relaxed">
+                공공기관 인재개발원 운영 디지털 전환 플랫폼.
+                <br />
+                반복업무는 시스템에게, 사람은 교육에.
+              </p>
+            </div>
+            <div className="flex gap-16">
+              <div>
+                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-subtext">Menu</div>
+                <ul className="space-y-2">
+                  {NAV_LINKS.slice(0, 4).map((l) => (
+                    <li key={l.href}>
+                      <a href={l.href} className="text-sm text-slate-300 hover:text-white transition-colors">{l.label}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.25em] text-subtext">More</div>
+                <ul className="space-y-2">
+                  {NAV_LINKS.slice(4).map((l) => (
+                    <li key={l.href}>
+                      <a href={l.href} className="text-sm text-slate-300 hover:text-white transition-colors">{l.label}</a>
+                    </li>
+                  ))}
+                  <li>
+                    <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="text-sm text-primary hover:text-white transition-colors">프로토타입 ↗</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between border-t border-white/10 py-5 text-[11px] uppercase tracking-[0.2em] text-subtext">
+            <span>© 2026 Smart Campus DX</span>
+            <span>Seoul · Korea</span>
+          </div>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          className="select-none whitespace-nowrap text-center font-black tracking-tighter leading-none text-white/10 text-[8.5vw] -mb-[1.7vw]"
+        >
+          SMART CAMPUS DX
+        </motion.div>
       </footer>
     </div>
   );
