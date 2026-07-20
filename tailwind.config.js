@@ -10,12 +10,12 @@ export default {
         subtext: "#9C968C",
       },
       borderColor: {
-        line: "rgba(245, 240, 232, 0.15)",
-        lineFaint: "rgba(245, 240, 232, 0.1)",
+        line: "rgba(255, 255, 255, 0.1)",
+        lineFaint: "rgba(255, 255, 255, 0.06)",
       },
       fontFamily: {
         sans: ["Inter", "Pretendard", "-apple-system", "Noto Sans KR", "sans-serif"],
-        serif: ['"Playfair Display"', '"Noto Serif KR"', "serif"],
+        serif: ['"Instrument Serif"', '"Noto Serif KR"', "serif"],
       },
     },
   },
