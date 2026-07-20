@@ -4,14 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: "#3B82F6",
-        primaryDark: "#1E3A5F",
-        gold: "#F59E0B",
-        ink: "#F1F5F9",
-        subtext: "#94A3B8",
-        surface: "#0A0F1E",
-        surfaceAlt: "#0F1526",
-        card: "#141E33",
+        surface: "#0A0A0A",
+        surfaceAlt: "#0F0F0F",
+        ink: "#F5F0E8",
+        subtext: "#9C968C",
+      },
+      borderColor: {
+        line: "rgba(245, 240, 232, 0.15)",
+        lineFaint: "rgba(245, 240, 232, 0.1)",
+      },
+      fontFamily: {
+        sans: ["Inter", "Pretendard", "-apple-system", "Noto Sans KR", "sans-serif"],
+        serif: ['"Playfair Display"', '"Noto Serif KR"', "serif"],
       },
     },
   },
