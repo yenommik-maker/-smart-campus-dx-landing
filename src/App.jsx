@@ -297,136 +297,103 @@ function FaqItem({ index, q, a }) {
   );
 }
 
-/* ---------- Nav ---------- */
+/* ---------- Video Hero ---------- */
 
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+const HERO_VIDEO_URL =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4";
+
+const HERO_NAV = [
+  { href: "#problem", label: "소개" },
+  { href: "#solution", label: "기능" },
+  { href: "#stats", label: "효과" },
+  { href: "#roadmap", label: "로드맵" },
+  { href: PROTOTYPE_URL, label: "프로토타입", external: true },
+];
+
+function VideoHero() {
+  const [videoFailed, setVideoFailed] = useState(false);
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "backdrop-blur-md bg-surface/40" : "bg-transparent"
-      }`}
-    >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <a href="#top" className="text-xs font-medium uppercase tracking-[0.25em] text-ink">
+    <header className="relative min-h-screen overflow-hidden" style={{ background: "hsl(var(--background))" }}>
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${import.meta.env.BASE_URL}hero-bg.jpg)` }}
+      />
+      {!videoFailed && (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          onError={() => setVideoFailed(true)}
+          className="absolute inset-0 z-0 h-full w-full object-cover"
+          src={HERO_VIDEO_URL}
+        />
+      )}
+
+      <nav className="relative z-10 mx-auto flex max-w-7xl flex-row items-center justify-between px-8 py-6">
+        <a
+          href="#top"
+          className="text-3xl tracking-tight text-white"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
+        >
           Smart Campus DX
         </a>
-        <div className="flex items-center gap-9">
-          {NAV_LINKS.map((l) => (
+        <div className="hidden items-center gap-8 md:flex">
+          {HERO_NAV.map((l) => (
             <a
-              key={l.href}
+              key={l.label}
               href={l.href}
-              className="group relative flex items-baseline gap-1.5 text-sm font-light text-ink/80 transition-colors hover:text-ink"
+              {...(l.external ? { target: "_blank", rel: "noreferrer" } : {})}
+              className="text-sm text-white/80 transition-colors hover:text-white"
             >
               {l.label}
-              <sup className="font-mono text-[9px] text-subtext">{l.num}</sup>
-              <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-ink transition-transform duration-300 group-hover:scale-x-100" />
             </a>
           ))}
         </div>
-      </div>
-    </nav>
-  );
-}
-
-/* ---------- Hero ---------- */
-
-function Hero() {
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const spring = { stiffness: 80, damping: 20 };
-  const bgX = useSpring(useTransform(mx, [-1, 1], [-20, 20]), spring);
-  const bgY = useSpring(useTransform(my, [-1, 1], [-20, 20]), spring);
-  const txtX = useSpring(useTransform(mx, [-1, 1], [8, -8]), spring);
-  const txtY = useSpring(useTransform(my, [-1, 1], [8, -8]), spring);
-
-  const onMouseMove = (e) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    mx.set(((e.clientX - r.left) / r.width) * 2 - 1);
-    my.set(((e.clientY - r.top) / r.height) * 2 - 1);
-  };
-
-  return (
-    <section onMouseMove={onMouseMove} className="relative flex min-h-screen flex-col overflow-hidden px-6 pt-28 pb-8">
-      <motion.div
-        className="absolute inset-0 z-0 scale-110 bg-cover bg-center"
-        style={{
-          x: bgX,
-          y: bgY,
-          backgroundImage: `url(${import.meta.env.BASE_URL}hero-bg.jpg)`,
-        }}
-      />
-      <div className="absolute inset-0 z-0 bg-black/40" />
-
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 flex-col justify-end">
-        <motion.h1
-          style={{ x: txtX, y: txtY }}
-          className="font-serif italic font-bold text-ink leading-[1.05] text-[8.5vw]"
+        <a
+          href={PROTOTYPE_URL}
+          target="_blank"
+          rel="noreferrer"
+          className="liquid-glass rounded-full px-6 py-2.5 text-sm text-white"
         >
-          <span className="block overflow-hidden whitespace-nowrap">
-            <motion.span
-              className="block"
-              initial={{ y: "110%" }}
-              animate={{ y: "0%" }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            >
-              인재개발원 운영,
-            </motion.span>
-          </span>
-          <span className="block overflow-hidden whitespace-nowrap">
-            <motion.span
-              className="block"
-              initial={{ y: "110%" }}
-              animate={{ y: "0%" }}
-              transition={{ duration: 1, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-            >
-              스스로 돌아갑니다
-            </motion.span>
-          </span>
-        </motion.h1>
+          프로토타입 보기
+        </a>
+      </nav>
 
-        <motion.div
-          style={{ x: txtX, y: txtY }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="mt-10 flex flex-col items-end gap-7 self-end text-right"
+      <section className="relative z-10 flex flex-col items-center px-6 pt-32 pb-40 text-center">
+        <h1
+          className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-[-2.46px] text-white sm:text-7xl md:text-8xl"
+          style={{ fontFamily: "'Instrument Serif', serif" }}
         >
-          <p className="text-sm font-light leading-relaxed text-ink/80">
-            연간 1,400시간의 반복업무를 자동화하고
-            <br />
-            교육생 중심의 스마트 캠퍼스를 구축합니다
-          </p>
-          <GhostButton href={PROTOTYPE_URL} external>
-            프로토타입 보기
-          </GhostButton>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-14 flex items-center justify-between border-t border-line pt-5"
+          인재개발원 운영이{" "}
+          <em className="not-italic" style={{ color: "hsl(var(--muted-foreground))" }}>
+            스스로 돌아갑니다.
+          </em>
+        </h1>
+        <p
+          className="animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed sm:text-lg"
+          style={{ color: "hsl(var(--muted-foreground))" }}
         >
-          <span className="text-[11px] font-medium uppercase tracking-[0.35em] text-subtext">
-            공공기관 인재개발원 디지털 전환
-          </span>
-          <motion.span
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="text-[11px] font-medium uppercase tracking-[0.35em] text-subtext"
+          연간 1,400시간의 반복업무를 자동화하고, 교육생 중심의 스마트 인재개발원을 구축합니다.
+        </p>
+        <div className="animate-fade-rise-delay-2 mt-12 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href={PROTOTYPE_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="liquid-glass rounded-full px-14 py-5 text-white"
           >
-            Scroll to explore ↓
-          </motion.span>
-        </motion.div>
-      </div>
-    </section>
+            프로토타입 보기
+          </a>
+          <a
+            href="#problem"
+            className="rounded-full border border-white/30 px-14 py-5 text-white transition-colors duration-300 hover:bg-white hover:text-black"
+          >
+            자세히 알아보기
+          </a>
+        </div>
+      </section>
+    </header>
   );
 }
 
@@ -461,10 +428,9 @@ export default function App() {
   return (
     <div id="top" className="bg-surface font-sans font-light text-ink">
       <CustomCursor />
-      <Navbar />
 
       {/* 1. Hero */}
-      <Hero />
+      <VideoHero />
 
       <MarqueeTicker />
 
