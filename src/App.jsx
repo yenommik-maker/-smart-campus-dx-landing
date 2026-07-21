@@ -661,25 +661,26 @@ export default function App() {
                   </p>
                 </div>
                 <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-600">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> Live
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> 자동 집계
                 </span>
               </div>
-              <div className="mt-6"><AreaChart /></div>
+              <div className="mt-2 text-[11px] text-slate-400">노선별 수요 집계 (예시)</div>
+              <div className="mt-3"><AreaChart /></div>
               <div className="pointer-events-none absolute bottom-6 right-6 hidden gap-3 sm:flex">
-                <MiniStat label="탑승 확인" value="24 / 34" delta="+실시간" />
+                <MiniStat label="현장 탑승 확인" value="4시간 → 0" delta="QR 자동" />
               </div>
             </motion.div>
 
             {/* dark accent live-stat card */}
             <motion.div custom={1} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className="flex flex-col justify-between rounded-3xl bg-slate-900 p-8 transition-transform duration-300 hover:-translate-y-1 md:col-span-2">
               <div className="flex items-center gap-2 text-sm font-medium text-white/70">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-accentSoft" /> 실시간 좌석 예약
+                <span className="h-2 w-2 rounded-full bg-accentSoft" /> 연간 절감 목표
               </div>
               <div>
                 <div className="font-display text-6xl font-bold leading-none text-white">
-                  92<span className="text-3xl text-white/50">%</span>
+                  980<span className="text-3xl text-white/50">시간</span>
                 </div>
-                <div className="mt-3 text-sm text-white/60">노선별 예약 완료율</div>
+                <div className="mt-3 text-sm text-white/60">연 1,400시간 반복업무의 70% 자동화</div>
               </div>
             </motion.div>
 
@@ -690,7 +691,14 @@ export default function App() {
                 <span className="font-display text-xl font-bold text-slate-900">Smart Room</span>
               </div>
               <p className="mb-5 text-sm font-light text-slate-500">규칙 기반 자동배정</p>
-              <div className="flex justify-center"><Donut value={92} color={C.green} /></div>
+              <div className="flex flex-col items-center justify-center py-4">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-display text-3xl font-bold text-slate-300 line-through">3시간</span>
+                  <span className="text-slate-400">→</span>
+                  <span className="font-display text-4xl font-bold" style={{ color: C.green }}>즉시</span>
+                </div>
+                <div className="mt-3 text-[11px] text-slate-400">객실 배정 민원 대응 시간</div>
+              </div>
             </motion.div>
 
             {/* Smart Schedule — bars (violet) */}
@@ -699,8 +707,9 @@ export default function App() {
                 <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 text-lg">🗓️</span>
                 <span className="font-display text-xl font-bold text-slate-900">Smart Schedule</span>
               </div>
-              <p className="mb-5 text-sm font-light text-slate-500">교시별 앱·QR 반영</p>
+              <p className="mb-4 text-sm font-light text-slate-500">교시별 앱·QR 반영</p>
               <BarsMini color={C.violet} soft="#EDE9FE" />
+              <div className="mt-4 text-[11px] text-slate-400">종이 출력·부착 2시간 → 앱 실시간 반영</div>
             </motion.div>
 
             {/* Smart Access — QR (amber) */}
@@ -758,9 +767,9 @@ export default function App() {
             </div>
             <div className="grid grid-cols-3 gap-3">
               {[
-                { l: "수요조사", v: "92%", c: "text-accent" },
-                { l: "탑승 확인", v: "24/34", c: "text-slate-900" },
-                { l: "객실 배정", v: "완료", c: "text-emerald-600" },
+                { l: "연 절감 목표", v: "980h", c: "text-accent" },
+                { l: "연 반복업무", v: "1,400h", c: "text-slate-900" },
+                { l: "종이 출력", v: "0장", c: "text-emerald-600" },
               ].map((t) => (
                 <div key={t.l} className="rounded-2xl bg-slate-50 p-4">
                   <div className="text-[11px] text-slate-400">{t.l}</div>
@@ -770,12 +779,12 @@ export default function App() {
             </div>
             <div className="mt-3 grid grid-cols-3 gap-3">
               <div className="col-span-2 rounded-2xl bg-slate-50 p-4">
-                <div className="mb-2 text-[11px] text-slate-400">주간 수요 추이</div>
+                <div className="mb-2 text-[11px] text-slate-400">누적 절감 시간 · 목표</div>
                 <AreaChart height={72} data={[10, 16, 13, 22, 18, 28, 34]} />
               </div>
               <div className="flex flex-col items-center justify-center rounded-2xl bg-slate-50 p-4">
                 <Donut value={70} size={92} stroke={11} />
-                <div className="mt-1 text-[11px] text-slate-400">자동화율</div>
+                <div className="mt-1 text-[11px] text-slate-400">자동화 목표</div>
               </div>
             </div>
           </motion.div>
