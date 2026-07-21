@@ -8,7 +8,7 @@ export default {
         surfaceAlt: "#0F0F0F",
         ink: "#F5F0E8",
         subtext: "#9C968C",
-        accent: "#3B82F6",
+        accent: "#2563EB",
         accentSoft: "#60A5FA",
       },
       borderColor: {

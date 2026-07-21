@@ -1,17 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { RoundedBox, Float } from "@react-three/drei";
-import {
-  motion,
-  AnimatePresence,
-  useInView,
-  animate,
-  useMotionValue,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import React, { useEffect, useId, useRef, useState } from "react";
+import { motion, AnimatePresence, useInView, animate } from "framer-motion";
 
 const PROTOTYPE_URL = "https://yenommik-maker.github.io/smart-campus-dx-prototype/";
+const BLUE = "#2563EB";
 
 const NAV_LINKS = [
   { href: "#problem", label: "소개" },
@@ -30,33 +21,6 @@ const BEFORE_ITEMS = [
 const AFTER_STATS = [
   { value: "1,400h", label: "연간 반복업무" },
   { value: "70%", label: "자동화 목표" },
-];
-
-const FEATURES = [
-  {
-    icon: "🚌",
-    title: "Smart Bus",
-    desc: "버스 수요조사부터 노선·좌석 배정, QR 탑승 확인까지 한 흐름으로 처리합니다.",
-    points: ["수요조사 자동 집계", "노선·좌석 배정", "QR 탑승 확인"],
-  },
-  {
-    icon: "🛏️",
-    title: "Smart Room",
-    desc: "신청기간 내 본인 선택 후 규칙 기반 자동배정, 필요 시 수동조정까지 지원합니다.",
-    points: ["본인 신청 접수", "규칙 기반 자동배정", "객실 수동조정"],
-  },
-  {
-    icon: "🗓️",
-    title: "Smart Schedule",
-    desc: "시간표를 한 번 입력하면 앱·DID·QR까지 자동으로 연동됩니다.",
-    points: ["시간표 일괄 입력", "앱·DID 연동", "강의실 QR 안내"],
-  },
-  {
-    icon: "🔑",
-    title: "Smart Access",
-    desc: "역할별 권한관리부터 공지 발송, 모바일 학생증 QR까지 현장 운영을 통합합니다.",
-    points: ["역할별 권한관리", "공지·알림 발송", "모바일 학생증 QR"],
-  },
 ];
 
 const PLATFORM_CHECKS = [
@@ -85,25 +49,6 @@ const TICKER_ITEMS = [
   "Smart Access",
   "연간 980시간 절감",
   "페이퍼리스 연계",
-];
-
-const FAQS = [
-  {
-    q: "기존 내부 행정프로그램과 충돌하지 않나요?",
-    a: "기존 시스템은 그대로 유지하면서 현장 운영 영역만 보완합니다. 행정·출결 등 기존 프로그램을 대체하지 않고 중복되는 수기 업무만 자동화합니다.",
-  },
-  {
-    q: "예산이 얼마나 필요한가요?",
-    a: "플랫폼 개발비는 별도 산정이며, 현장 Wi-Fi 구축은 초기 약 3,000만원 규모로 예상됩니다. 단계별 도입으로 초기 부담을 낮출 수 있습니다.",
-  },
-  {
-    q: "교육생 기기가 없으면 어떻게 하나요?",
-    a: "페이퍼리스 사업(아이패드 지급)과 연계하면 별도 장비 구입 없이 운영할 수 있습니다. 개인 스마트폰으로도 동일한 기능을 이용할 수 있도록 반응형으로 설계합니다.",
-  },
-  {
-    q: "도입까지 얼마나 걸리나요?",
-    a: "1단계 Smart Bus 시범 운영은 2026년 하반기를 목표로 하며, 검증 후 다음 단계로 순차 확대합니다.",
-  },
 ];
 
 const TESTIMONIALS = [
@@ -148,96 +93,58 @@ const PLANS = [
   },
 ];
 
-/* ---------- 3D ---------- */
-
-function IPadMesh({ position = [0, 0, 0], scale = 1, rotationSpeed = 0.15 }) {
-  const group = useRef();
-  useFrame((_, delta) => {
-    if (group.current) group.current.rotation.y += delta * rotationSpeed;
-  });
-  return (
-    <group ref={group} position={position} scale={scale}>
-      <RoundedBox args={[2.2, 3, 0.14]} radius={0.12} smoothness={4}>
-        <meshStandardMaterial color="#d6d1c8" roughness={0.15} metalness={0.7} />
-      </RoundedBox>
-      <mesh position={[0, 0, 0.075]}>
-        <planeGeometry args={[1.92, 2.72]} />
-        <meshStandardMaterial color="#050505" roughness={0.05} metalness={0.4} />
-      </mesh>
-    </group>
-  );
-}
-
-function PhoneMesh({ position = [0, 0, 0], scale = 1, rotationSpeed = 0.15 }) {
-  const group = useRef();
-  useFrame((_, delta) => {
-    if (group.current) group.current.rotation.y += delta * rotationSpeed;
-  });
-  return (
-    <group ref={group} position={position} scale={scale}>
-      <RoundedBox args={[1.05, 2.15, 0.12]} radius={0.14} smoothness={4}>
-        <meshStandardMaterial color="#1a1a1a" roughness={0.15} metalness={0.7} />
-      </RoundedBox>
-      <mesh position={[0, 0, 0.065]}>
-        <planeGeometry args={[0.9, 1.9]} />
-        <meshStandardMaterial color="#050505" roughness={0.05} metalness={0.4} />
-      </mesh>
-    </group>
-  );
-}
-
-function SceneLights() {
-  return (
-    <>
-      <ambientLight intensity={0.7} />
-      <directionalLight position={[4, 5, 5]} intensity={1} />
-      <directionalLight position={[-4, -2, 3]} intensity={0.4} />
-    </>
-  );
-}
+const FAQS = [
+  {
+    q: "기존 내부 행정프로그램과 충돌하지 않나요?",
+    a: "기존 시스템은 그대로 유지하면서 현장 운영 영역만 보완합니다. 행정·출결 등 기존 프로그램을 대체하지 않고 중복되는 수기 업무만 자동화합니다.",
+  },
+  {
+    q: "예산이 얼마나 필요한가요?",
+    a: "플랫폼 개발비는 별도 산정이며, 현장 Wi-Fi 구축은 초기 약 3,000만원 규모로 예상됩니다. 단계별 도입으로 초기 부담을 낮출 수 있습니다.",
+  },
+  {
+    q: "교육생 기기가 없으면 어떻게 하나요?",
+    a: "페이퍼리스 사업(아이패드 지급)과 연계하면 별도 장비 구입 없이 운영할 수 있습니다. 개인 스마트폰으로도 동일한 기능을 이용할 수 있도록 반응형으로 설계합니다.",
+  },
+  {
+    q: "도입까지 얼마나 걸리나요?",
+    a: "1단계 Smart Bus 시범 운영은 2026년 하반기를 목표로 하며, 검증 후 다음 단계로 순차 확대합니다.",
+  },
+];
 
 /* ---------- Cursor ---------- */
 
 function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const x = useMotionValue(-100);
-  const y = useMotionValue(-100);
-  const sx = useSpring(x, { stiffness: 400, damping: 30 });
-  const sy = useSpring(y, { stiffness: 400, damping: 30 });
+  const ref = useRef(null);
 
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
     setEnabled(true);
+    let raf;
     const move = (e) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
-    };
-    const over = (e) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (ref.current) ref.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+      });
       setHovering(!!e.target.closest("a, button"));
     };
     window.addEventListener("mousemove", move);
-    window.addEventListener("mouseover", over);
-    return () => {
-      window.removeEventListener("mousemove", move);
-      window.removeEventListener("mouseover", over);
-    };
-  }, [x, y]);
+    return () => window.removeEventListener("mousemove", move);
+  }, []);
 
   if (!enabled) return null;
   return (
-    <motion.div
-      className="pointer-events-none fixed left-0 top-0 z-[100] rounded-full border border-ink"
+    <div
+      ref={ref}
+      className="pointer-events-none fixed left-0 top-0 z-[100] rounded-full transition-[width,height] duration-200"
       style={{
-        x: sx,
-        y: sy,
-        translateX: "-50%",
-        translateY: "-50%",
-        mixBlendMode: hovering ? "difference" : "normal",
-        backgroundColor: hovering ? "#F5F0E8" : "transparent",
+        width: hovering ? 46 : 12,
+        height: hovering ? 46 : 12,
+        backgroundColor: "#ffffff",
+        mixBlendMode: "difference",
       }}
-      animate={{ width: hovering ? 48 : 12, height: hovering ? 48 : 12 }}
-      transition={{ type: "spring", stiffness: 300, damping: 25 }}
     />
   );
 }
@@ -270,60 +177,138 @@ function FadeInSection({ children, className = "", id }) {
 
 function SectionLabel({ children }) {
   return (
-    <div className="mb-6 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.28em] text-accent">
+    <div className="mb-6 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-accent">
       <span className="h-1.5 w-1.5 rounded-full bg-accent" />
       {children}
     </div>
   );
 }
 
-const CARD =
-  "rounded-3xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.01] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40";
+const CARD = "rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl";
 
-function GhostButton({ href, children, external = false }) {
-  return (
-    <a
-      href={href}
-      {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-      className="liquid-glass inline-block rounded-full px-10 py-4 text-sm font-medium text-white"
-    >
-      {children}
-    </a>
-  );
-}
+/* ---------- Charts ---------- */
 
-function FeatureCard({ f, i, className = "" }) {
+function Donut({ value, size = 132, stroke = 14, color = BLUE }) {
+  const r = (size - stroke) / 2;
+  const c = 2 * Math.PI * r;
   return (
-    <motion.div
-      custom={i}
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, amount: 0.3 }}
-      className={`${CARD} ${className} flex flex-col p-8`}
-    >
-      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-2xl ring-1 ring-accent/20">
-        {f.icon}
+    <div className="relative shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#E5E7EB" strokeWidth={stroke} />
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={stroke}
+          strokeLinecap="round"
+          strokeDasharray={c}
+          initial={{ strokeDashoffset: c }}
+          whileInView={{ strokeDashoffset: c * (1 - value / 100) }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-2xl font-bold text-slate-900">{value}%</span>
       </div>
-      <div className="mb-3 font-display text-2xl font-bold text-ink">{f.title}</div>
-      <p className="mb-6 text-sm font-light leading-relaxed text-subtext">{f.desc}</p>
-      <ul className="mt-auto flex flex-wrap gap-x-5 gap-y-2 border-t border-line pt-5">
-        {f.points.map((p) => (
-          <li key={p} className="flex items-center gap-2 text-sm font-light text-ink/80">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-            {p}
-          </li>
-        ))}
-      </ul>
-    </motion.div>
+    </div>
   );
 }
 
-function CountUpNumber({ target, suffix = "", className = "text-[8vw]" }) {
+function AreaChart({ data = [12, 18, 15, 24, 19, 30, 26, 36, 31, 42], color = BLUE, height = 100 }) {
+  const gid = useId().replace(/:/g, "");
+  const w = 320;
+  const h = height;
+  const pad = 10;
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const step = w / (data.length - 1);
+  const y = (d) => h - pad - ((d - min) / (max - min || 1)) * (h - pad * 2);
+  const pts = data.map((d, i) => [i * step, y(d)]);
+  const line = pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ");
+  const area = `${line} L${w},${h} L0,${h} Z`;
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none" className="w-full" style={{ height }}>
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.22" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={area} fill={`url(#${gid})`} />
+      <motion.path
+        d={line}
+        fill="none"
+        stroke={color}
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        whileInView={{ pathLength: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+      />
+    </svg>
+  );
+}
+
+function BarsMini({ data = [45, 68, 52, 84, 60, 96], height = 100 }) {
+  const max = Math.max(...data);
+  return (
+    <div className="flex items-end gap-2.5" style={{ height }}>
+      {data.map((d, i) => (
+        <motion.div
+          key={i}
+          className="flex-1 rounded-md"
+          style={{ background: i === data.length - 1 ? BLUE : "#DBEAFE" }}
+          initial={{ height: 0 }}
+          whileInView={{ height: `${(d / max) * 100}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: i * 0.06, ease: "easeOut" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function QRGlyph() {
+  const pattern = [
+    1, 1, 1, 0, 1,
+    1, 0, 1, 0, 1,
+    1, 1, 0, 1, 0,
+    0, 0, 1, 0, 1,
+    1, 0, 1, 1, 1,
+  ];
+  return (
+    <div className="grid w-fit grid-cols-5 gap-1.5">
+      {pattern.map((c, i) => (
+        <span key={i} className={`h-4 w-4 rounded-[3px] ${c ? "bg-slate-900" : "bg-slate-200"}`} />
+      ))}
+    </div>
+  );
+}
+
+function MiniStat({ label, value, delta }) {
+  return (
+    <div className="rounded-2xl bg-white p-3 shadow-lg ring-1 ring-slate-100">
+      <div className="text-[11px] text-slate-400">{label}</div>
+      <div className="mt-0.5 flex items-center gap-2">
+        <span className="text-sm font-bold text-slate-900">{value}</span>
+        {delta && (
+          <span className="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600">
+            {delta}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function CountUpNumber({ target, suffix = "", className = "text-6xl md:text-7xl" }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
   const [display, setDisplay] = useState(0);
-
   useEffect(() => {
     if (!inView) return;
     const controls = animate(0, target, {
@@ -333,28 +318,22 @@ function CountUpNumber({ target, suffix = "", className = "text-[8vw]" }) {
     });
     return () => controls.stop();
   }, [inView, target]);
-
   return (
-    <span ref={ref} className={`font-display font-bold tracking-tight text-ink whitespace-nowrap leading-none ${className}`}>
+    <span ref={ref} className={`font-display font-bold tracking-tight text-slate-900 ${className}`}>
       {display.toLocaleString()}
       {suffix}
     </span>
   );
 }
 
-function FaqItem({ q, a }) {
-  const [open, setOpen] = useState(false);
+function FaqItem({ q, a, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-line">
-      <button
-        onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center gap-5 py-6 text-left"
-      >
-        <span className="flex-1 text-base font-medium text-ink md:text-lg">{q}</span>
-        <span
-          className={`shrink-0 text-2xl font-light text-ink transition-transform duration-300 ${open ? "rotate-45" : ""}`}
-        >
-          +
+    <div className={`rounded-2xl border transition-colors ${open ? "border-slate-200 bg-white shadow-sm" : "border-slate-200 bg-white"}`}>
+      <button onClick={() => setOpen((v) => !v)} className="flex w-full items-center gap-5 px-6 py-5 text-left">
+        <span className="flex-1 text-base font-medium text-slate-900">{q}</span>
+        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-lg font-light transition-all duration-300 ${open ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500"}`}>
+          {open ? "−" : "+"}
         </span>
       </button>
       <AnimatePresence initial={false}>
@@ -366,7 +345,7 @@ function FaqItem({ q, a }) {
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <p className="pb-6 pr-10 text-sm font-light leading-relaxed text-subtext">{a}</p>
+            <p className="px-6 pb-6 text-sm font-light leading-relaxed text-slate-500">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -374,7 +353,7 @@ function FaqItem({ q, a }) {
   );
 }
 
-/* ---------- Video Hero ---------- */
+/* ---------- Video Hero (dark, unchanged) ---------- */
 
 const HERO_VIDEO_URL =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4";
@@ -408,11 +387,7 @@ function VideoHero() {
       )}
 
       <nav className="relative z-10 mx-auto flex max-w-7xl flex-row items-center justify-between px-8 py-6">
-        <a
-          href="#top"
-          className="text-3xl tracking-tight text-white"
-          style={{ fontFamily: "'Instrument Serif', serif" }}
-        >
+        <a href="#top" className="text-3xl tracking-tight text-white" style={{ fontFamily: "'Instrument Serif', serif" }}>
           Smart Campus DX
         </a>
         <div className="hidden items-center gap-8 md:flex">
@@ -454,12 +429,7 @@ function VideoHero() {
           연간 1,400시간의 반복업무를 자동화하고, 교육생 중심의 스마트 인재개발원을 구축합니다.
         </p>
         <div className="animate-fade-rise-delay-2 mt-12 flex flex-wrap items-center justify-center gap-4">
-          <a
-            href={PROTOTYPE_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="liquid-glass rounded-full px-14 py-5 text-white"
-          >
+          <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="liquid-glass rounded-full px-14 py-5 text-white">
             프로토타입 보기
           </a>
           <a
@@ -474,13 +444,13 @@ function VideoHero() {
   );
 }
 
-/* ---------- Ticker ---------- */
+/* ---------- Ticker (light) ---------- */
 
 function MarqueeTicker() {
   const loop = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
   return (
-    <div className="relative z-10 overflow-hidden border-y border-line bg-surface py-6">
-      <div className="mb-4 text-center text-[11px] font-medium uppercase tracking-[0.28em] text-ink/40">
+    <div className="relative overflow-hidden border-b border-slate-200 bg-white py-6">
+      <div className="mb-4 text-center text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400">
         Trusted Building Blocks
       </div>
       <motion.div
@@ -489,76 +459,56 @@ function MarqueeTicker() {
         transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
       >
         {loop.map((t, i) => (
-          <span key={i} className="flex items-center gap-10 text-lg font-light text-ink/40 md:text-xl">
+          <span key={i} className="flex items-center gap-10 text-lg font-medium text-slate-400 md:text-xl">
             {t}
-            <span className="text-ink/20">·</span>
+            <span className="text-slate-300">·</span>
           </span>
         ))}
       </motion.div>
-      <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-32"
-        style={{ background: "linear-gradient(90deg, #0A0A0A, transparent)" }}
-      />
-      <div
-        className="pointer-events-none absolute inset-y-0 right-0 w-32"
-        style={{ background: "linear-gradient(270deg, #0A0A0A, transparent)" }}
-      />
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-32" style={{ background: "linear-gradient(90deg,#fff,transparent)" }} />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-32" style={{ background: "linear-gradient(270deg,#fff,transparent)" }} />
     </div>
   );
 }
+
+const H2 = "font-display font-bold tracking-tight text-slate-900 leading-[1.08] text-[5vw]";
 
 /* ---------- App ---------- */
 
 export default function App() {
   return (
-    <div id="top" className="bg-surface font-sans font-light text-ink">
+    <div id="top" className="bg-white font-sans text-slate-900">
       <CustomCursor />
 
-      {/* 1. Hero */}
+      {/* 1. Hero (dark) */}
       <VideoHero />
 
       <MarqueeTicker />
 
       {/* 2. Problem — Before / After */}
-      <FadeInSection id="problem" className="bg-surface px-6 py-28">
+      <FadeInSection id="problem" className="bg-white px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Why It Matters</SectionLabel>
-          <h2 className="mb-16 max-w-3xl font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
-            반복업무가 연수원 운영을 막고 있습니다
-          </h2>
+          <h2 className={`mb-16 max-w-3xl ${H2}`}>반복업무가 연수원 운영을 막고 있습니다</h2>
           <div className="grid items-stretch gap-6 md:grid-cols-2">
-            <motion.div
-              custom={0}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.3 }}
-              className={`${CARD} p-8`}
-            >
-              <div className="mb-7 text-[11px] font-medium uppercase tracking-[0.28em] text-ink/50">Before</div>
+            <motion.div custom={0} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8`}>
+              <div className="mb-7 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400">Before</div>
               <ul className="space-y-5">
                 {BEFORE_ITEMS.map((t) => (
-                  <li key={t} className="flex items-start gap-3 text-sm font-light text-subtext md:text-base">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ink/50" />
+                  <li key={t} className="flex items-start gap-3 text-sm text-slate-600 md:text-base">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-rose-400" />
                     {t}
                   </li>
                 ))}
               </ul>
             </motion.div>
-            <motion.div
-              custom={1}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.3 }}
-              className={`${CARD} flex flex-col justify-center gap-8 p-8`}
-            >
-              <div className="text-[11px] font-medium uppercase tracking-[0.28em] text-ink/50">After</div>
+            <motion.div custom={1} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className="flex flex-col justify-center gap-8 rounded-3xl bg-slate-900 p-8">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/50">After</div>
               <div className="grid grid-cols-2 gap-6">
                 {AFTER_STATS.map((s) => (
                   <div key={s.label}>
-                    <div className="font-display text-5xl font-bold tracking-tight text-accent md:text-6xl">{s.value}</div>
-                    <div className="mt-2 text-sm font-light text-subtext">{s.label}</div>
+                    <div className="font-display text-5xl font-bold tracking-tight text-accentSoft md:text-6xl">{s.value}</div>
+                    <div className="mt-2 text-sm text-white/60">{s.label}</div>
                   </div>
                 ))}
               </div>
@@ -567,127 +517,158 @@ export default function App() {
         </div>
       </FadeInSection>
 
-      {/* 3. Core Features */}
-      <FadeInSection id="solution" className="bg-surfaceAlt px-6 py-28">
+      {/* 3. Core Features — Bento with charts */}
+      <FadeInSection id="solution" className="bg-slate-50 px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Core Features</SectionLabel>
-          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
+          <h2 className={`mb-16 ${H2}`}>
             연수원 운영의
             <br />
             모든 것을 자동화
           </h2>
           <div className="grid gap-5 md:auto-rows-fr md:grid-cols-6">
-            {/* wide */}
-            <FeatureCard f={FEATURES[0]} i={0} className="md:col-span-4" />
+            {/* Smart Bus — wide, area chart + floating stats */}
+            <motion.div custom={0} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} relative overflow-hidden p-8 md:col-span-4`}>
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="text-2xl">🚌</span>
+                    <span className="font-display text-2xl font-bold text-slate-900">Smart Bus</span>
+                  </div>
+                  <p className="max-w-sm text-sm font-light leading-relaxed text-slate-500">
+                    수요조사부터 노선·좌석 배정, QR 탑승 확인까지 한 흐름으로 처리합니다.
+                  </p>
+                </div>
+                <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-600">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> Live
+                </span>
+              </div>
+              <div className="mt-6"><AreaChart /></div>
+              <div className="pointer-events-none absolute bottom-6 right-6 hidden gap-3 sm:flex">
+                <MiniStat label="탑승 확인" value="24 / 34" delta="+실시간" />
+              </div>
+            </motion.div>
+
             {/* dark accent live-stat card */}
-            <motion.div
-              custom={1}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, amount: 0.3 }}
-              className="flex flex-col justify-between rounded-3xl bg-accent p-8 transition-transform duration-300 hover:-translate-y-1 md:col-span-2"
-            >
-              <div className="flex items-center gap-2 text-sm font-medium text-white/80">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
-                실시간 탑승 확인
+            <motion.div custom={1} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className="flex flex-col justify-between rounded-3xl bg-slate-900 p-8 transition-transform duration-300 hover:-translate-y-1 md:col-span-2">
+              <div className="flex items-center gap-2 text-sm font-medium text-white/70">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-accentSoft" /> 실시간 좌석 예약
               </div>
               <div>
                 <div className="font-display text-6xl font-bold leading-none text-white">
-                  24<span className="text-3xl text-white/60">/34</span>
+                  92<span className="text-3xl text-white/50">%</span>
                 </div>
-                <div className="mt-3 text-sm text-white/70">QR 스캔으로 자동 집계</div>
+                <div className="mt-3 text-sm text-white/60">노선별 예약 완료율</div>
               </div>
             </motion.div>
-            {/* three equal */}
-            <FeatureCard f={FEATURES[1]} i={2} className="md:col-span-2" />
-            <FeatureCard f={FEATURES[2]} i={3} className="md:col-span-2" />
-            <FeatureCard f={FEATURES[3]} i={4} className="md:col-span-2" />
+
+            {/* Smart Room — donut */}
+            <motion.div custom={2} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8 md:col-span-2`}>
+              <div className="mb-1 flex items-center gap-2">
+                <span className="text-xl">🛏️</span>
+                <span className="font-display text-xl font-bold text-slate-900">Smart Room</span>
+              </div>
+              <p className="mb-5 text-sm font-light text-slate-500">규칙 기반 자동배정</p>
+              <div className="flex justify-center"><Donut value={92} /></div>
+            </motion.div>
+
+            {/* Smart Schedule — bars */}
+            <motion.div custom={3} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8 md:col-span-2`}>
+              <div className="mb-1 flex items-center gap-2">
+                <span className="text-xl">🗓️</span>
+                <span className="font-display text-xl font-bold text-slate-900">Smart Schedule</span>
+              </div>
+              <p className="mb-5 text-sm font-light text-slate-500">교시별 앱·QR 반영</p>
+              <BarsMini />
+            </motion.div>
+
+            {/* Smart Access — QR */}
+            <motion.div custom={4} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8 md:col-span-2`}>
+              <div className="mb-1 flex items-center gap-2">
+                <span className="text-xl">🔑</span>
+                <span className="font-display text-xl font-bold text-slate-900">Smart Access</span>
+              </div>
+              <p className="mb-5 text-sm font-light text-slate-500">모바일 학생증 QR</p>
+              <div className="flex justify-center pt-2"><QRGlyph /></div>
+            </motion.div>
           </div>
         </div>
       </FadeInSection>
 
-      {/* 4. Platform Overview */}
-      <FadeInSection id="platform" className="bg-surface px-6 py-28">
+      {/* 4. Platform Overview — dashboard mock */}
+      <FadeInSection id="platform" className="bg-white px-6 py-28">
         <div className="mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-2">
           <div>
             <SectionLabel>Platform Overview</SectionLabel>
-            <h2 className="mb-6 font-display font-bold tracking-tight text-ink leading-[1.1] text-[4vw]">
+            <h2 className={`mb-6 ${H2}`}>
               실제 운영 화면을
               <br />
               직접 확인하세요
             </h2>
-            <p className="mb-8 text-base font-light leading-relaxed text-subtext">
+            <p className="mb-8 text-base font-light leading-relaxed text-slate-500">
               클릭형 프로토타입에서 운영자·교육생·관리자 화면을 직접 눌러볼 수 있습니다.
             </p>
             <ul className="mb-10 space-y-3">
               {PLATFORM_CHECKS.map((c) => (
-                <li key={c} className="flex items-start gap-3 text-sm font-light text-ink/90 md:text-base">
-                  <span className="mt-0.5 font-bold text-accent">✓</span>
+                <li key={c} className="flex items-start gap-3 text-sm text-slate-700 md:text-base">
+                  <span className="mt-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-white">✓</span>
                   {c}
                 </li>
               ))}
             </ul>
-            <a
-              href={PROTOTYPE_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-block rounded-full bg-accent px-8 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
-            >
-              프로토타입 열기 ↗
+            <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="inline-block rounded-full bg-slate-900 px-8 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5">
+              프로토타입 열기 →
             </a>
           </div>
-          <motion.div
-            custom={0}
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.3 }}
-            className={`${CARD} overflow-hidden`}
-          >
-            <div className="flex items-center gap-2 border-b border-line px-5 py-4">
-              <span className="h-3 w-3 rounded-full bg-white/20" />
-              <span className="h-3 w-3 rounded-full bg-white/20" />
-              <span className="h-3 w-3 rounded-full bg-white/20" />
-              <span className="ml-4 text-xs font-light text-subtext">smart-campus-dx / dashboard</span>
+
+          <motion.div custom={0} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-xl">
+            <div className="mb-4 flex items-center gap-2 border-b border-slate-100 pb-4">
+              <span className="h-3 w-3 rounded-full bg-slate-200" />
+              <span className="h-3 w-3 rounded-full bg-slate-200" />
+              <span className="h-3 w-3 rounded-full bg-slate-200" />
+              <span className="ml-3 text-xs text-slate-400">smart-campus-dx / dashboard</span>
             </div>
-            <div className="grid grid-cols-2 gap-4 p-6">
-              {["버스 수요조사 92%", "객실 자동배정 완료", "오늘 강의 4교시", "탑승 QR 24/34"].map((t) => (
-                <div
-                  key={t}
-                  className="rounded-xl border border-line bg-white/[0.02] p-5 text-xs font-light text-ink/80"
-                >
-                  {t}
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { l: "수요조사", v: "92%", c: "text-accent" },
+                { l: "탑승 확인", v: "24/34", c: "text-slate-900" },
+                { l: "객실 배정", v: "완료", c: "text-emerald-600" },
+              ].map((t) => (
+                <div key={t.l} className="rounded-2xl bg-slate-50 p-4">
+                  <div className="text-[11px] text-slate-400">{t.l}</div>
+                  <div className={`mt-1 text-lg font-bold ${t.c}`}>{t.v}</div>
                 </div>
               ))}
+            </div>
+            <div className="mt-3 grid grid-cols-3 gap-3">
+              <div className="col-span-2 rounded-2xl bg-slate-50 p-4">
+                <div className="mb-2 text-[11px] text-slate-400">주간 수요 추이</div>
+                <AreaChart height={72} data={[10, 16, 13, 22, 18, 28, 34]} />
+              </div>
+              <div className="flex flex-col items-center justify-center rounded-2xl bg-slate-50 p-4">
+                <Donut value={70} size={92} stroke={11} />
+                <div className="mt-1 text-[11px] text-slate-400">자동화율</div>
+              </div>
             </div>
           </motion.div>
         </div>
       </FadeInSection>
 
       {/* 5. How It Works */}
-      <FadeInSection id="how" className="bg-surfaceAlt px-6 py-28">
+      <FadeInSection id="how" className="bg-slate-50 px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>How It Works</SectionLabel>
-          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
+          <h2 className={`mb-16 ${H2}`}>
             3단계로 연수원을
             <br />
             스마트하게
           </h2>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-3">
             {HOW_STEPS.map((s, i) => (
-              <motion.div
-                key={s.num}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
-                className={`${CARD} p-8`}
-              >
-                <div className="mb-6 font-display font-bold text-5xl text-ink/25">Step {s.num}</div>
-                <div className="mb-3 text-xl font-medium text-ink">{s.title}</div>
-                <p className="text-sm font-light leading-relaxed text-subtext">{s.desc}</p>
+              <motion.div key={s.num} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8`}>
+                <div className="mb-6 font-display text-5xl font-bold text-accent/25">Step {s.num}</div>
+                <div className="mb-3 text-xl font-bold text-slate-900">{s.title}</div>
+                <p className="text-sm font-light leading-relaxed text-slate-500">{s.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -695,21 +676,15 @@ export default function App() {
       </FadeInSection>
 
       {/* 6. Stats */}
-      <FadeInSection id="stats" className="bg-surface px-6 py-28">
+      <FadeInSection id="stats" className="bg-white px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>By the Numbers</SectionLabel>
-          <div className="grid grid-cols-2 gap-x-8 gap-y-14 border-t border-line pt-16 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-14 border-t border-slate-200 pt-16 md:grid-cols-4">
             {STATS.map((s, i) => (
-              <motion.div
-                key={s.label}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.4 }}
-              >
-                <CountUpNumber target={s.value} suffix={s.suffix} className="text-6xl md:text-7xl" />
-                <div className="mt-3 text-sm font-light text-subtext">{s.label}</div>
+              <motion.div key={s.label} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }}>
+                <CountUpNumber target={s.value} suffix={s.suffix} />
+                <div className="mt-3 h-1 w-10 rounded-full bg-accent" />
+                <div className="mt-3 text-sm font-light text-slate-500">{s.label}</div>
               </motion.div>
             ))}
           </div>
@@ -717,34 +692,26 @@ export default function App() {
       </FadeInSection>
 
       {/* 6b. Testimonials */}
-      <FadeInSection id="voices" className="bg-surfaceAlt px-6 py-28">
+      <FadeInSection id="voices" className="bg-slate-50 px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>What Operators Say</SectionLabel>
-          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
+          <h2 className={`mb-16 ${H2}`}>
             현장 담당자의
             <br />
             이야기
           </h2>
           <div className="grid gap-5 md:grid-cols-3">
             {TESTIMONIALS.map((t, i) => (
-              <motion.div
-                key={t.name}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
-                className={`${CARD} flex flex-col p-8`}
-              >
+              <motion.div key={t.name} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} flex flex-col p-8`}>
                 <div className="mb-4 text-accent">★★★★★</div>
-                <p className="mb-8 flex-1 text-sm font-light leading-relaxed text-ink/90">"{t.quote}"</p>
-                <div className="flex items-center gap-3 border-t border-line pt-5">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-sm font-bold text-accent">
+                <p className="mb-8 flex-1 text-sm font-light leading-relaxed text-slate-700">"{t.quote}"</p>
+                <div className="flex items-center gap-3 border-t border-slate-100 pt-5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent">
                     {t.name.slice(0, 1)}
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-ink">{t.name}</div>
-                    <div className="text-xs font-light text-subtext">{t.role}</div>
+                    <div className="text-sm font-semibold text-slate-900">{t.name}</div>
+                    <div className="text-xs font-light text-slate-400">{t.role}</div>
                   </div>
                 </div>
               </motion.div>
@@ -754,103 +721,92 @@ export default function App() {
       </FadeInSection>
 
       {/* 6c. Adoption Plans */}
-      <FadeInSection id="plans" className="bg-surface px-6 py-28">
+      <FadeInSection id="plans" className="bg-white px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Adoption Plan</SectionLabel>
-          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
+          <h2 className={`mb-16 ${H2}`}>
             단계별로 부담 없이
             <br />
             도입합니다
           </h2>
           <div className="grid gap-5 md:grid-cols-3">
-            {PLANS.map((p, i) => (
-              <motion.div
-                key={p.name}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
-                className={
-                  p.highlight
-                    ? "flex flex-col rounded-3xl border border-accent bg-accent/10 p-8 ring-1 ring-accent/30"
-                    : `${CARD} flex flex-col p-8`
-                }
-              >
-                <div className="mb-6 flex items-center justify-between">
-                  <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">{p.phase}</span>
-                  {p.highlight && (
-                    <span className="rounded-full bg-accent px-3 py-1 text-[11px] font-semibold text-white">추천</span>
-                  )}
-                </div>
-                <div className="mb-1 font-display text-2xl font-bold text-ink">{p.name}</div>
-                <p className="mb-6 text-sm font-light text-subtext">{p.tagline}</p>
-                <ul className="mb-8 flex-1 space-y-3 border-t border-line pt-6">
-                  {p.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-sm font-light text-ink/85">
-                      <span className="mt-0.5 font-bold text-accent">✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href={PROTOTYPE_URL}
-                  target="_blank"
-                  rel="noreferrer"
+            {PLANS.map((p, i) => {
+              const dark = p.highlight;
+              return (
+                <motion.div
+                  key={p.name}
+                  custom={i}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.3 }}
                   className={
-                    p.highlight
-                      ? "rounded-full bg-accent py-3.5 text-center text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
-                      : "rounded-full border border-white/20 py-3.5 text-center text-sm font-medium text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
+                    dark
+                      ? "flex flex-col rounded-3xl bg-slate-900 p-8 shadow-xl"
+                      : `${CARD} flex flex-col p-8`
                   }
                 >
-                  프로토타입 보기
-                </a>
-              </motion.div>
-            ))}
+                  <div className="mb-6 flex items-center justify-between">
+                    <span className={`text-xs font-semibold uppercase tracking-[0.2em] ${dark ? "text-accentSoft" : "text-accent"}`}>{p.phase}</span>
+                    {dark && <span className="rounded-full bg-accent px-3 py-1 text-[11px] font-semibold text-white">추천</span>}
+                  </div>
+                  <div className={`mb-1 font-display text-2xl font-bold ${dark ? "text-white" : "text-slate-900"}`}>{p.name}</div>
+                  <p className={`mb-6 text-sm font-light ${dark ? "text-white/60" : "text-slate-500"}`}>{p.tagline}</p>
+                  <ul className={`mb-8 flex-1 space-y-3 border-t pt-6 ${dark ? "border-white/10" : "border-slate-100"}`}>
+                    {p.features.map((f) => (
+                      <li key={f} className={`flex items-start gap-3 text-sm font-light ${dark ? "text-white/85" : "text-slate-600"}`}>
+                        <span className={`mt-0.5 font-bold ${dark ? "text-accentSoft" : "text-accent"}`}>✓</span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <a
+                    href={PROTOTYPE_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={
+                      dark
+                        ? "rounded-full bg-white py-3.5 text-center text-sm font-semibold text-slate-900 transition-transform duration-300 hover:-translate-y-0.5"
+                        : "rounded-full bg-slate-900 py-3.5 text-center text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
+                    }
+                  >
+                    프로토타입 보기
+                  </a>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </FadeInSection>
 
       {/* 7. FAQ */}
-      <FadeInSection id="faq" className="bg-surfaceAlt px-6 py-28">
+      <FadeInSection id="faq" className="bg-slate-50 px-6 py-28">
         <div className="mx-auto max-w-3xl">
           <SectionLabel>FAQ</SectionLabel>
-          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
-            자주 묻는 질문
-          </h2>
-          <div className="border-t border-line">
-            {FAQS.map((f) => (
-              <FaqItem key={f.q} {...f} />
+          <h2 className={`mb-16 ${H2}`}>자주 묻는 질문</h2>
+          <div className="space-y-3">
+            {FAQS.map((f, i) => (
+              <FaqItem key={f.q} {...f} defaultOpen={i === 0} />
             ))}
           </div>
         </div>
       </FadeInSection>
 
       {/* 8. CTA */}
-      <FadeInSection className="relative overflow-hidden bg-surfaceAlt px-6 py-36 text-center">
-        <div
-          className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(59,130,246,0.14), transparent 65%)" }}
-        />
+      <FadeInSection className="relative overflow-hidden px-6 py-36 text-center">
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,#EFF6FF,#ffffff)" }} />
+        <div className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[720px] -translate-x-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(37,99,235,0.14), transparent 65%)" }} />
         <div className="relative z-10 mx-auto max-w-4xl">
-          <h2 className="mb-12 font-display font-bold tracking-tight text-ink leading-[1.1] text-[5vw]">
+          <h2 className="mb-12 font-display font-bold tracking-tight text-slate-900 leading-[1.1] text-[5vw]">
             연수원 운영의 디지털 전환,
             <br />
             지금 시작합니다
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a
-              href={PROTOTYPE_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="rounded-full bg-accent px-10 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
-            >
+            <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="rounded-full bg-accent px-10 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5">
               프로토타입 보기
             </a>
-            <a
-              href="#problem"
-              className="rounded-full border border-white/30 px-10 py-4 text-sm font-medium text-ink transition-colors duration-300 hover:bg-white hover:text-black"
-            >
+            <a href="#problem" className="rounded-full border border-slate-300 bg-white px-10 py-4 text-sm font-medium text-slate-900 transition-colors duration-300 hover:bg-slate-900 hover:text-white">
               자세히 알아보기
             </a>
           </div>
@@ -858,14 +814,14 @@ export default function App() {
       </FadeInSection>
 
       {/* Footer */}
-      <footer className="border-t border-line bg-surface px-6 pt-16 pb-10">
+      <footer className="border-t border-slate-200 bg-white px-6 pt-16 pb-10">
         <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div className="max-w-xs">
-            <div className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
+            <div className="mb-4 flex items-center gap-2 text-base font-bold text-slate-900">
               <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-xs text-white">◆</span>
               Smart Campus DX
             </div>
-            <p className="text-xs font-light leading-relaxed text-subtext">
+            <p className="text-xs font-light leading-relaxed text-slate-500">
               공공기관 인재개발원 운영을 위한 스마트 디지털 전환 플랫폼. 반복업무는 시스템에게, 사람은 교육에.
             </p>
           </div>
@@ -875,14 +831,14 @@ export default function App() {
             { h: "링크", items: [["프로토타입", PROTOTYPE_URL, true]] },
           ].map((col) => (
             <div key={col.h}>
-              <div className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-subtext">{col.h}</div>
+              <div className="mb-4 text-[11px] font-semibold uppercase tracking-[0.25em] text-slate-400">{col.h}</div>
               <ul className="space-y-2.5">
                 {col.items.map(([label, href, ext]) => (
                   <li key={label}>
                     <a
                       href={href}
                       {...(ext ? { target: "_blank", rel: "noreferrer" } : {})}
-                      className="text-sm font-light text-ink/75 transition-colors hover:text-ink"
+                      className="text-sm font-light text-slate-600 transition-colors hover:text-slate-900"
                     >
                       {label}
                       {ext && " ↗"}
@@ -893,7 +849,7 @@ export default function App() {
             </div>
           ))}
         </div>
-        <div className="mx-auto mt-14 flex max-w-6xl items-center justify-between border-t border-line pt-6 text-[11px] font-light uppercase tracking-[0.25em] text-subtext">
+        <div className="mx-auto mt-14 flex max-w-6xl items-center justify-between border-t border-slate-200 pt-6 text-[11px] font-light uppercase tracking-[0.25em] text-slate-400">
           <span>© 2026 Smart Campus DX</span>
           <span>Seoul · Korea</span>
         </div>
