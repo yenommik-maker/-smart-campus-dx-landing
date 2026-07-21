@@ -78,6 +78,8 @@ body {
   min-width: 1024px;
   font-family: "Inter", "Pretendard", -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
   color: #0f172a;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 button,

@@ -430,6 +430,7 @@ const HERO_NAV = [
 
 function VideoHero() {
   const [videoFailed, setVideoFailed] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   return (
     <header className="relative min-h-screen overflow-hidden" style={{ background: "hsl(var(--background))" }}>
       <div
@@ -442,11 +443,19 @@ function VideoHero() {
           loop
           muted
           playsInline
+          preload="auto"
+          poster={`${import.meta.env.BASE_URL}hero-bg.jpg`}
+          onCanPlay={() => setVideoReady(true)}
           onError={() => setVideoFailed(true)}
-          className="absolute inset-0 z-0 h-full w-full object-cover"
+          className="absolute inset-0 z-0 h-full w-full object-cover transition-opacity duration-700 ease-out"
+          style={{ opacity: videoReady ? 1 : 0 }}
           src={HERO_VIDEO_URL}
         />
       )}
+      <div
+        className="absolute inset-0 z-[1]"
+        style={{ background: "linear-gradient(180deg,rgba(6,20,40,0.42) 0%,rgba(6,20,40,0.20) 42%,rgba(6,20,40,0.52) 100%)" }}
+      />
 
       <nav className="relative z-10 mx-auto flex max-w-7xl flex-row items-center justify-between px-8 py-6">
         <a href="#top" className="text-3xl tracking-tight text-white" style={{ fontFamily: "'Instrument Serif', serif" }}>
@@ -476,8 +485,8 @@ function VideoHero() {
 
       <section className="relative z-10 flex flex-col items-center px-6 pt-32 pb-40 text-center">
         <h1
-          className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-[-2.46px] text-white sm:text-7xl md:text-8xl"
-          style={{ fontFamily: "'Instrument Serif', serif" }}
+          className="animate-fade-rise max-w-7xl break-keep text-5xl font-normal leading-[1.05] tracking-[-1px] text-white sm:text-7xl md:text-8xl"
+          style={{ fontFamily: "'Instrument Serif', 'Noto Serif KR', serif" }}
         >
           인재개발원 운영이{" "}
           <em className="not-italic" style={{ color: "hsl(var(--muted-foreground))" }}>
