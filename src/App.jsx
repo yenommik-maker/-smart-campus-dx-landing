@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useInView, animate } from "framer-motion";
 
 const PROTOTYPE_URL = "https://yenommik-maker.github.io/smart-campus-dx-prototype/";
 const BLUE = "#2563EB";
+const C = { blue: "#2563EB", green: "#10B981", violet: "#7C3AED", amber: "#F59E0B", rose: "#F43F5E", cyan: "#06B6D4" };
 
 const NAV_LINKS = [
   { href: "#problem", label: "소개" },
@@ -30,16 +31,16 @@ const PLATFORM_CHECKS = [
 ];
 
 const HOW_STEPS = [
-  { num: "01", title: "현황 분석", desc: "현황 분석 인터뷰를 통해 운영 요구사항을 도출합니다." },
-  { num: "02", title: "프로토타입 검증", desc: "클릭형 프로토타입으로 검증한 뒤 MVP를 개발합니다." },
-  { num: "03", title: "시범 운영", desc: "시범 운영으로 효과를 확인하고 전면 확대합니다." },
+  { num: "01", title: "현황 분석", desc: "현황 분석 인터뷰를 통해 운영 요구사항을 도출합니다.", color: C.blue, bg: "bg-blue-50" },
+  { num: "02", title: "프로토타입 검증", desc: "클릭형 프로토타입으로 검증한 뒤 MVP를 개발합니다.", color: C.violet, bg: "bg-violet-50" },
+  { num: "03", title: "시범 운영", desc: "시범 운영으로 효과를 확인하고 전면 확대합니다.", color: C.green, bg: "bg-emerald-50" },
 ];
 
 const STATS = [
-  { value: 980, suffix: "h", label: "연간 절감 가능 업무시간" },
-  { value: 106, suffix: "개", label: "연간 운영 과정 수" },
-  { value: 0, suffix: "장", label: "종이 출력 목표" },
-  { value: 70, suffix: "%", label: "반복업무 자동화율" },
+  { value: 980, suffix: "h", label: "연간 절감 가능 업무시간", color: C.blue, spark: [8, 14, 12, 20, 26, 34, 40] },
+  { value: 106, suffix: "개", label: "연간 운영 과정 수", color: C.violet, spark: [30, 28, 32, 30, 34, 33, 36] },
+  { value: 0, suffix: "장", label: "종이 출력 목표", color: C.green, spark: [40, 32, 26, 20, 14, 8, 3] },
+  { value: 70, suffix: "%", label: "반복업무 자동화율", color: C.amber, spark: [10, 20, 30, 42, 52, 62, 70] },
 ];
 
 const TICKER_ITEMS = [
@@ -49,24 +50,6 @@ const TICKER_ITEMS = [
   "Smart Access",
   "연간 980시간 절감",
   "페이퍼리스 연계",
-];
-
-const TESTIMONIALS = [
-  {
-    quote: "버스 수요조사를 앱으로 돌리니 이틀 걸리던 취합이 반나절로 줄었습니다. 현장 확인 부담도 크게 덜었어요.",
-    name: "김OO 주무관",
-    role: "과정 운영 담당",
-  },
-  {
-    quote: "객실 자동배정 덕분에 민원 전화가 눈에 띄게 줄었습니다. 규칙만 정해두면 나머지는 시스템이 처리합니다.",
-    name: "이OO 담당",
-    role: "생활관 운영",
-  },
-  {
-    quote: "시간표를 한 번만 올리면 앱·QR까지 자동 연동돼 종이 출력이 사라졌습니다. 교육생 문의도 줄었어요.",
-    name: "박OO 팀장",
-    role: "교육기획팀",
-  },
 ];
 
 const PLANS = [
@@ -253,7 +236,7 @@ function AreaChart({ data = [12, 18, 15, 24, 19, 30, 26, 36, 31, 42], color = BL
   );
 }
 
-function BarsMini({ data = [45, 68, 52, 84, 60, 96], height = 100 }) {
+function BarsMini({ data = [45, 68, 52, 84, 60, 96], color = BLUE, soft = "#EDE9FE", height = 100 }) {
   const max = Math.max(...data);
   return (
     <div className="flex items-end gap-2.5" style={{ height }}>
@@ -261,7 +244,7 @@ function BarsMini({ data = [45, 68, 52, 84, 60, 96], height = 100 }) {
         <motion.div
           key={i}
           className="flex-1 rounded-md"
-          style={{ background: i === data.length - 1 ? BLUE : "#DBEAFE" }}
+          style={{ background: i === data.length - 1 ? color : soft }}
           initial={{ height: 0 }}
           whileInView={{ height: `${(d / max) * 100}%` }}
           viewport={{ once: true }}
@@ -269,6 +252,39 @@ function BarsMini({ data = [45, 68, 52, 84, 60, 96], height = 100 }) {
         />
       ))}
     </div>
+  );
+}
+
+function Sparkline({ data, color = BLUE, height = 34 }) {
+  const gid = useId().replace(/:/g, "");
+  const w = 100;
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const step = w / (data.length - 1);
+  const y = (d) => height - 4 - ((d - min) / (max - min || 1)) * (height - 8);
+  const pts = data.map((d, i) => [i * step, y(d)]);
+  const line = pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ");
+  return (
+    <svg viewBox={`0 0 ${w} ${height}`} preserveAspectRatio="none" className="w-full" style={{ height }}>
+      <defs>
+        <linearGradient id={gid} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity="0.25" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={`${line} L${w},${height} L0,${height} Z`} fill={`url(#${gid})`} />
+      <motion.path
+        d={line}
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        initial={{ pathLength: 0 }}
+        whileInView={{ pathLength: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      />
+    </svg>
   );
 }
 
@@ -305,7 +321,49 @@ function MiniStat({ label, value, delta }) {
   );
 }
 
-function CountUpNumber({ target, suffix = "", className = "text-6xl md:text-7xl" }) {
+const FLOW = [
+  { icon: "📋", label: "수요조사", sub: "자동 집계", color: C.blue, bg: "bg-blue-50" },
+  { icon: "⚙️", label: "자동배정", sub: "규칙 기반", color: C.violet, bg: "bg-violet-50" },
+  { icon: "📲", label: "알림·QR", sub: "앱 연동", color: C.amber, bg: "bg-amber-50" },
+  { icon: "✅", label: "완료·집계", sub: "실시간 반영", color: C.green, bg: "bg-emerald-50" },
+];
+
+function FlowDiagram() {
+  return (
+    <div className="mt-5 rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <div className="mb-6 text-sm font-semibold text-slate-900">자동화 처리 흐름</div>
+      <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-center">
+        {FLOW.map((f, i) => (
+          <React.Fragment key={f.label}>
+            <motion.div
+              custom={i}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.4 }}
+              className={`flex flex-1 items-center gap-3 rounded-2xl ${f.bg} p-4`}
+            >
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-xl shadow-sm">{f.icon}</span>
+              <div>
+                <div className="text-sm font-bold" style={{ color: f.color }}>{f.label}</div>
+                <div className="text-[11px] text-slate-500">{f.sub}</div>
+              </div>
+            </motion.div>
+            {i < FLOW.length - 1 && (
+              <span className="mx-auto text-slate-300 md:mx-0">
+                <svg width="22" height="22" viewBox="0 0 24 24" className="rotate-90 md:rotate-0" fill="none">
+                  <path d="M4 12h16m0 0-6-6m6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CountUpNumber({ target, suffix = "", className = "text-6xl md:text-7xl", colorOverride }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
   const [display, setDisplay] = useState(0);
@@ -319,7 +377,11 @@ function CountUpNumber({ target, suffix = "", className = "text-6xl md:text-7xl"
     return () => controls.stop();
   }, [inView, target]);
   return (
-    <span ref={ref} className={`font-display font-bold tracking-tight text-slate-900 ${className}`}>
+    <span
+      ref={ref}
+      className={`font-display font-bold tracking-tight ${colorOverride ? "" : "text-slate-900"} ${className}`}
+      style={colorOverride ? { color: colorOverride } : undefined}
+    >
       {display.toLocaleString()}
       {suffix}
     </span>
@@ -532,7 +594,7 @@ export default function App() {
               <div className="flex items-start justify-between">
                 <div>
                   <div className="mb-2 flex items-center gap-2">
-                    <span className="text-2xl">🚌</span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-xl">🚌</span>
                     <span className="font-display text-2xl font-bold text-slate-900">Smart Bus</span>
                   </div>
                   <p className="max-w-sm text-sm font-light leading-relaxed text-slate-500">
@@ -562,36 +624,43 @@ export default function App() {
               </div>
             </motion.div>
 
-            {/* Smart Room — donut */}
+            {/* Smart Room — donut (green) */}
             <motion.div custom={2} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8 md:col-span-2`}>
               <div className="mb-1 flex items-center gap-2">
-                <span className="text-xl">🛏️</span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-lg">🛏️</span>
                 <span className="font-display text-xl font-bold text-slate-900">Smart Room</span>
               </div>
               <p className="mb-5 text-sm font-light text-slate-500">규칙 기반 자동배정</p>
-              <div className="flex justify-center"><Donut value={92} /></div>
+              <div className="flex justify-center"><Donut value={92} color={C.green} /></div>
             </motion.div>
 
-            {/* Smart Schedule — bars */}
+            {/* Smart Schedule — bars (violet) */}
             <motion.div custom={3} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8 md:col-span-2`}>
               <div className="mb-1 flex items-center gap-2">
-                <span className="text-xl">🗓️</span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 text-lg">🗓️</span>
                 <span className="font-display text-xl font-bold text-slate-900">Smart Schedule</span>
               </div>
               <p className="mb-5 text-sm font-light text-slate-500">교시별 앱·QR 반영</p>
-              <BarsMini />
+              <BarsMini color={C.violet} soft="#EDE9FE" />
             </motion.div>
 
-            {/* Smart Access — QR */}
+            {/* Smart Access — QR (amber) */}
             <motion.div custom={4} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8 md:col-span-2`}>
               <div className="mb-1 flex items-center gap-2">
-                <span className="text-xl">🔑</span>
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-lg">🔑</span>
                 <span className="font-display text-xl font-bold text-slate-900">Smart Access</span>
               </div>
               <p className="mb-5 text-sm font-light text-slate-500">모바일 학생증 QR</p>
-              <div className="flex justify-center pt-2"><QRGlyph /></div>
+              <div className="flex items-center justify-center gap-4 pt-2">
+                <QRGlyph />
+                <div className="text-center">
+                  <div className="font-display text-3xl font-bold" style={{ color: C.amber }}>1</div>
+                  <div className="text-[11px] text-slate-400">개 QR로<br />출결·식사·탑승</div>
+                </div>
+              </div>
             </motion.div>
           </div>
+          <FlowDiagram />
         </div>
       </FadeInSection>
 
@@ -666,7 +735,9 @@ export default function App() {
           <div className="grid gap-5 md:grid-cols-3">
             {HOW_STEPS.map((s, i) => (
               <motion.div key={s.num} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8`}>
-                <div className="mb-6 font-display text-5xl font-bold text-accent/25">Step {s.num}</div>
+                <div className={`mb-6 flex h-14 w-14 items-center justify-center rounded-2xl ${s.bg} font-display text-2xl font-bold`} style={{ color: s.color }}>
+                  {s.num}
+                </div>
                 <div className="mb-3 text-xl font-bold text-slate-900">{s.title}</div>
                 <p className="text-sm font-light leading-relaxed text-slate-500">{s.desc}</p>
               </motion.div>
@@ -679,41 +750,14 @@ export default function App() {
       <FadeInSection id="stats" className="bg-white px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>By the Numbers</SectionLabel>
-          <div className="grid grid-cols-2 gap-x-8 gap-y-14 border-t border-slate-200 pt-16 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-6 border-t border-slate-200 pt-16 md:grid-cols-4">
             {STATS.map((s, i) => (
-              <motion.div key={s.label} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }}>
-                <CountUpNumber target={s.value} suffix={s.suffix} />
-                <div className="mt-3 h-1 w-10 rounded-full bg-accent" />
-                <div className="mt-3 text-sm font-light text-slate-500">{s.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </FadeInSection>
-
-      {/* 6b. Testimonials */}
-      <FadeInSection id="voices" className="bg-slate-50 px-6 py-28">
-        <div className="mx-auto max-w-6xl">
-          <SectionLabel>What Operators Say</SectionLabel>
-          <h2 className={`mb-16 ${H2}`}>
-            현장 담당자의
-            <br />
-            이야기
-          </h2>
-          <div className="grid gap-5 md:grid-cols-3">
-            {TESTIMONIALS.map((t, i) => (
-              <motion.div key={t.name} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} flex flex-col p-8`}>
-                <div className="mb-4 text-accent">★★★★★</div>
-                <p className="mb-8 flex-1 text-sm font-light leading-relaxed text-slate-700">"{t.quote}"</p>
-                <div className="flex items-center gap-3 border-t border-slate-100 pt-5">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent">
-                    {t.name.slice(0, 1)}
-                  </div>
-                  <div>
-                    <div className="text-sm font-semibold text-slate-900">{t.name}</div>
-                    <div className="text-xs font-light text-slate-400">{t.role}</div>
-                  </div>
+              <motion.div key={s.label} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div style={{ color: s.color }}>
+                  <CountUpNumber target={s.value} suffix={s.suffix} className="text-5xl md:text-6xl" colorOverride={s.color} />
                 </div>
+                <div className="mt-4"><Sparkline data={s.spark} color={s.color} /></div>
+                <div className="mt-4 text-sm font-light text-slate-500">{s.label}</div>
               </motion.div>
             ))}
           </div>
@@ -827,7 +871,7 @@ export default function App() {
           </div>
           {[
             { h: "바로가기", items: [["소개", "#problem"], ["기능", "#solution"], ["효과", "#stats"], ["도입 단계", "#plans"]] },
-            { h: "더 보기", items: [["현장 후기", "#voices"], ["FAQ", "#faq"], ["진행 절차", "#how"]] },
+            { h: "더 보기", items: [["도입 단계", "#plans"], ["FAQ", "#faq"], ["진행 절차", "#how"]] },
             { h: "링크", items: [["프로토타입", PROTOTYPE_URL, true]] },
           ].map((col) => (
             <div key={col.h}>
