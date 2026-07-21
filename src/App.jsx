@@ -429,26 +429,17 @@ const HERO_NAV = [
 ];
 
 function VideoHero() {
-  const [videoFailed, setVideoFailed] = useState(false);
   return (
     <header className="relative min-h-screen overflow-hidden" style={{ background: "hsl(var(--background))" }}>
-      <div
-        className="absolute inset-0 z-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${import.meta.env.BASE_URL}hero-bg.jpg)` }}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        className="absolute inset-0 z-0 h-full w-full object-cover"
+        src={HERO_VIDEO_URL}
       />
-      {!videoFailed && (
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          poster={`${import.meta.env.BASE_URL}hero-bg.jpg`}
-          onError={() => setVideoFailed(true)}
-          className="absolute inset-0 z-0 h-full w-full object-cover"
-          src={HERO_VIDEO_URL}
-        />
-      )}
 
       <nav className="relative z-10 mx-auto flex max-w-7xl flex-row items-center justify-between px-8 py-6">
         <a href="#top" className="text-3xl tracking-tight text-white" style={{ fontFamily: "'Instrument Serif', serif" }}>
