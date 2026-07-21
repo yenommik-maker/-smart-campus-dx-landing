@@ -535,20 +535,40 @@ function MarqueeTicker() {
 
 const H2 = "font-display font-bold tracking-tight text-slate-900 leading-[1.08] text-[5vw]";
 
+/* ---------- Scenic fixed background (sky + rolling hills) ---------- */
+
+function SceneBackground() {
+  return (
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,#E8F1FF 0%,#F3F7FF 38%,#FFFFFF 72%)" }} />
+      <div className="absolute -top-24 left-[15%] h-[420px] w-[420px] rounded-full" style={{ background: "radial-gradient(circle,rgba(37,99,235,0.10),transparent 70%)" }} />
+      <div className="absolute top-[30%] right-[8%] h-[380px] w-[380px] rounded-full" style={{ background: "radial-gradient(circle,rgba(124,58,237,0.08),transparent 70%)" }} />
+      <div className="absolute bottom-[18vh] left-[40%] h-[320px] w-[320px] rounded-full" style={{ background: "radial-gradient(circle,rgba(16,185,129,0.10),transparent 70%)" }} />
+      <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 320" preserveAspectRatio="none" style={{ height: "44vh" }}>
+        <path fill="#DCFCE7" fillOpacity="0.85" d="M0,208 C240,150 480,262 720,214 C960,168 1200,250 1440,196 L1440,320 L0,320 Z" />
+        <path fill="#BBF7D0" fillOpacity="0.85" d="M0,244 C300,198 520,298 780,248 C1040,200 1240,282 1440,240 L1440,320 L0,320 Z" />
+        <path fill="#86EFAC" fillOpacity="0.7" d="M0,282 C360,250 600,314 900,284 C1140,262 1300,300 1440,284 L1440,320 L0,320 Z" />
+      </svg>
+    </div>
+  );
+}
+
 /* ---------- App ---------- */
 
 export default function App() {
   return (
-    <div id="top" className="bg-white font-sans text-slate-900">
+    <div id="top" className="relative bg-white font-sans text-slate-900">
       <CustomCursor />
+      <SceneBackground />
 
+      <div className="relative z-10">
       {/* 1. Hero (dark) */}
       <VideoHero />
 
       <MarqueeTicker />
 
       {/* 2. Problem — Before / After */}
-      <FadeInSection id="problem" className="bg-white px-6 py-28">
+      <FadeInSection id="problem" className="px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Why It Matters</SectionLabel>
           <h2 className={`mb-16 max-w-3xl ${H2}`}>반복업무가 연수원 운영을 막고 있습니다</h2>
@@ -580,7 +600,7 @@ export default function App() {
       </FadeInSection>
 
       {/* 3. Core Features — Bento with charts */}
-      <FadeInSection id="solution" className="bg-slate-50 px-6 py-28">
+      <FadeInSection id="solution" className="bg-white/40 px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Core Features</SectionLabel>
           <h2 className={`mb-16 ${H2}`}>
@@ -665,7 +685,7 @@ export default function App() {
       </FadeInSection>
 
       {/* 4. Platform Overview — dashboard mock */}
-      <FadeInSection id="platform" className="bg-white px-6 py-28">
+      <FadeInSection id="platform" className="px-6 py-28">
         <div className="mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-2">
           <div>
             <SectionLabel>Platform Overview</SectionLabel>
@@ -724,7 +744,7 @@ export default function App() {
       </FadeInSection>
 
       {/* 5. How It Works */}
-      <FadeInSection id="how" className="bg-slate-50 px-6 py-28">
+      <FadeInSection id="how" className="bg-white/40 px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>How It Works</SectionLabel>
           <h2 className={`mb-16 ${H2}`}>
@@ -747,7 +767,7 @@ export default function App() {
       </FadeInSection>
 
       {/* 6. Stats */}
-      <FadeInSection id="stats" className="bg-white px-6 py-28">
+      <FadeInSection id="stats" className="px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>By the Numbers</SectionLabel>
           <div className="grid grid-cols-2 gap-6 border-t border-slate-200 pt-16 md:grid-cols-4">
@@ -765,7 +785,7 @@ export default function App() {
       </FadeInSection>
 
       {/* 6c. Adoption Plans */}
-      <FadeInSection id="plans" className="bg-white px-6 py-28">
+      <FadeInSection id="plans" className="px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Adoption Plan</SectionLabel>
           <h2 className={`mb-16 ${H2}`}>
@@ -824,7 +844,7 @@ export default function App() {
       </FadeInSection>
 
       {/* 7. FAQ */}
-      <FadeInSection id="faq" className="bg-slate-50 px-6 py-28">
+      <FadeInSection id="faq" className="bg-white/40 px-6 py-28">
         <div className="mx-auto max-w-3xl">
           <SectionLabel>FAQ</SectionLabel>
           <h2 className={`mb-16 ${H2}`}>자주 묻는 질문</h2>
@@ -838,7 +858,7 @@ export default function App() {
 
       {/* 8. CTA */}
       <FadeInSection className="relative overflow-hidden px-6 py-36 text-center">
-        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,#EFF6FF,#ffffff)" }} />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,rgba(239,246,255,0.55),rgba(255,255,255,0.15))" }} />
         <div className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[720px] -translate-x-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(37,99,235,0.14), transparent 65%)" }} />
         <div className="relative z-10 mx-auto max-w-4xl">
           <h2 className="mb-12 font-display font-bold tracking-tight text-slate-900 leading-[1.1] text-[5vw]">
@@ -898,6 +918,7 @@ export default function App() {
           <span>Seoul · Korea</span>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
