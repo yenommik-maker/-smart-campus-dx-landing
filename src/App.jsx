@@ -441,8 +441,8 @@ function VideoHero() {
         src={HERO_VIDEO_URL}
       />
 
-      <nav className="relative z-10 mx-auto flex max-w-7xl flex-row items-center justify-between px-8 py-6">
-        <a href="#top" className="text-3xl tracking-tight text-white" style={{ fontFamily: "'Instrument Serif', serif" }}>
+      <nav className="relative z-10 mx-auto flex max-w-7xl flex-row items-center justify-between px-5 py-6 md:px-8">
+        <a href="#top" className="text-2xl tracking-tight text-white md:text-3xl" style={{ fontFamily: "'Instrument Serif', serif" }}>
           Smart Campus DX
         </a>
         <div className="hidden items-center gap-8 md:flex">
@@ -461,7 +461,7 @@ function VideoHero() {
           href={PROTOTYPE_URL}
           target="_blank"
           rel="noreferrer"
-          className="liquid-glass rounded-full px-6 py-2.5 text-sm text-white"
+          className="liquid-glass hidden rounded-full px-6 py-2.5 text-sm text-white sm:inline-block"
         >
           프로토타입 보기
         </a>
@@ -526,7 +526,7 @@ function MarqueeTicker() {
   );
 }
 
-const H2 = "font-display font-bold tracking-tight text-slate-900 leading-[1.08] text-[5vw]";
+const H2 = "font-display font-bold tracking-tight text-slate-900 leading-[1.08] text-[clamp(2rem,5.2vw,4.5rem)]";
 
 /* ---------- Scenic fixed background (sky + rolling hills) ---------- */
 
@@ -874,7 +874,7 @@ export default function App() {
         <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,rgba(239,246,255,0.55),rgba(255,255,255,0.15))" }} />
         <div className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[720px] -translate-x-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(37,99,235,0.14), transparent 65%)" }} />
         <div className="relative z-10 mx-auto max-w-4xl">
-          <h2 className="mb-12 font-display font-bold tracking-tight text-slate-900 leading-[1.1] text-[5vw]">
+          <h2 className="mb-12 font-display font-bold tracking-tight text-slate-900 leading-[1.1] text-[clamp(2rem,5.2vw,4.5rem)]">
             인재개발원 운영의 디지털 전환,
             <br />
             지금 시작합니다
