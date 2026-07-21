@@ -8,7 +8,8 @@ export default {
         surfaceAlt: "#0F0F0F",
         ink: "#F5F0E8",
         subtext: "#9C968C",
-        accent: "#C6F24E",
+        accent: "#3B82F6",
+        accentSoft: "#60A5FA",
       },
       borderColor: {
         line: "rgba(255, 255, 255, 0.1)",

@@ -106,6 +106,48 @@ const FAQS = [
   },
 ];
 
+const TESTIMONIALS = [
+  {
+    quote: "버스 수요조사를 앱으로 돌리니 이틀 걸리던 취합이 반나절로 줄었습니다. 현장 확인 부담도 크게 덜었어요.",
+    name: "김OO 주무관",
+    role: "과정 운영 담당",
+  },
+  {
+    quote: "객실 자동배정 덕분에 민원 전화가 눈에 띄게 줄었습니다. 규칙만 정해두면 나머지는 시스템이 처리합니다.",
+    name: "이OO 담당",
+    role: "생활관 운영",
+  },
+  {
+    quote: "시간표를 한 번만 올리면 앱·QR까지 자동 연동돼 종이 출력이 사라졌습니다. 교육생 문의도 줄었어요.",
+    name: "박OO 팀장",
+    role: "교육기획팀",
+  },
+];
+
+const PLANS = [
+  {
+    phase: "1단계",
+    name: "파일럿 도입",
+    tagline: "가장 반복이 잦은 업무부터",
+    highlight: false,
+    features: ["Smart Bus 시범 운영", "1개 과정 적용", "현장 피드백 수집", "효과 측정 리포트"],
+  },
+  {
+    phase: "2단계",
+    name: "부분 도입",
+    tagline: "검증된 기능을 확대",
+    highlight: true,
+    features: ["Smart Room·Schedule 추가", "다수 과정 동시 운영", "역할별 권한 관리", "운영 데이터 대시보드"],
+  },
+  {
+    phase: "3단계",
+    name: "전면 도입",
+    tagline: "연수원 운영 전 과정으로",
+    highlight: false,
+    features: ["Smart Access 통합", "전 과정 표준 적용", "페이퍼리스 연계", "완전 자동화 운영"],
+  },
+];
+
 /* ---------- 3D ---------- */
 
 function IPadMesh({ position = [0, 0, 0], scale = 1, rotationSpeed = 0.15 }) {
@@ -247,6 +289,33 @@ function GhostButton({ href, children, external = false }) {
     >
       {children}
     </a>
+  );
+}
+
+function FeatureCard({ f, i, className = "" }) {
+  return (
+    <motion.div
+      custom={i}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.3 }}
+      className={`${CARD} ${className} flex flex-col p-8`}
+    >
+      <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-2xl ring-1 ring-accent/20">
+        {f.icon}
+      </div>
+      <div className="mb-3 font-display text-2xl font-bold text-ink">{f.title}</div>
+      <p className="mb-6 text-sm font-light leading-relaxed text-subtext">{f.desc}</p>
+      <ul className="mt-auto flex flex-wrap gap-x-5 gap-y-2 border-t border-line pt-5">
+        {f.points.map((p) => (
+          <li key={p} className="flex items-center gap-2 text-sm font-light text-ink/80">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+            {p}
+          </li>
+        ))}
+      </ul>
+    </motion.div>
   );
 }
 
@@ -507,35 +576,33 @@ export default function App() {
             <br />
             모든 것을 자동화
           </h2>
-          <div className="grid gap-5 md:grid-cols-6">
-            {FEATURES.map((f, i) => {
-              const span = [i % 4 === 0 || i % 4 === 3 ? "md:col-span-4" : "md:col-span-2"][0];
-              return (
-                <motion.div
-                  key={f.title}
-                  custom={i}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true, amount: 0.3 }}
-                  className={`${CARD} ${span} p-10`}
-                >
-                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-2xl ring-1 ring-accent/20">
-                    {f.icon}
-                  </div>
-                  <div className="mb-3 font-display text-2xl font-bold text-ink">{f.title}</div>
-                  <p className="mb-6 max-w-md text-sm font-light leading-relaxed text-subtext">{f.desc}</p>
-                  <ul className="flex flex-wrap gap-x-6 gap-y-2.5 border-t border-line pt-6">
-                    {f.points.map((p) => (
-                      <li key={p} className="flex items-center gap-2 text-sm font-light text-ink/80">
-                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                        {p}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
+          <div className="grid gap-5 md:auto-rows-fr md:grid-cols-6">
+            {/* wide */}
+            <FeatureCard f={FEATURES[0]} i={0} className="md:col-span-4" />
+            {/* dark accent live-stat card */}
+            <motion.div
+              custom={1}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.3 }}
+              className="flex flex-col justify-between rounded-3xl bg-accent p-8 transition-transform duration-300 hover:-translate-y-1 md:col-span-2"
+            >
+              <div className="flex items-center gap-2 text-sm font-medium text-white/80">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-white" />
+                실시간 탑승 확인
+              </div>
+              <div>
+                <div className="font-display text-6xl font-bold leading-none text-white">
+                  24<span className="text-3xl text-white/60">/34</span>
+                </div>
+                <div className="mt-3 text-sm text-white/70">QR 스캔으로 자동 집계</div>
+              </div>
+            </motion.div>
+            {/* three equal */}
+            <FeatureCard f={FEATURES[1]} i={2} className="md:col-span-2" />
+            <FeatureCard f={FEATURES[2]} i={3} className="md:col-span-2" />
+            <FeatureCard f={FEATURES[3]} i={4} className="md:col-span-2" />
           </div>
         </div>
       </FadeInSection>
@@ -565,7 +632,7 @@ export default function App() {
               href={PROTOTYPE_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-block rounded-full bg-accent px-8 py-4 text-sm font-semibold text-black transition-transform duration-300 hover:-translate-y-0.5"
+              className="inline-block rounded-full bg-accent px-8 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
             >
               프로토타입 열기 ↗
             </a>
@@ -649,6 +716,101 @@ export default function App() {
         </div>
       </FadeInSection>
 
+      {/* 6b. Testimonials */}
+      <FadeInSection id="voices" className="bg-surfaceAlt px-6 py-28">
+        <div className="mx-auto max-w-6xl">
+          <SectionLabel>What Operators Say</SectionLabel>
+          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
+            현장 담당자의
+            <br />
+            이야기
+          </h2>
+          <div className="grid gap-5 md:grid-cols-3">
+            {TESTIMONIALS.map((t, i) => (
+              <motion.div
+                key={t.name}
+                custom={i}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.3 }}
+                className={`${CARD} flex flex-col p-8`}
+              >
+                <div className="mb-4 text-accent">★★★★★</div>
+                <p className="mb-8 flex-1 text-sm font-light leading-relaxed text-ink/90">"{t.quote}"</p>
+                <div className="flex items-center gap-3 border-t border-line pt-5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/15 text-sm font-bold text-accent">
+                    {t.name.slice(0, 1)}
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-ink">{t.name}</div>
+                    <div className="text-xs font-light text-subtext">{t.role}</div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </FadeInSection>
+
+      {/* 6c. Adoption Plans */}
+      <FadeInSection id="plans" className="bg-surface px-6 py-28">
+        <div className="mx-auto max-w-6xl">
+          <SectionLabel>Adoption Plan</SectionLabel>
+          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
+            단계별로 부담 없이
+            <br />
+            도입합니다
+          </h2>
+          <div className="grid gap-5 md:grid-cols-3">
+            {PLANS.map((p, i) => (
+              <motion.div
+                key={p.name}
+                custom={i}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.3 }}
+                className={
+                  p.highlight
+                    ? "flex flex-col rounded-3xl border border-accent bg-accent/10 p-8 ring-1 ring-accent/30"
+                    : `${CARD} flex flex-col p-8`
+                }
+              >
+                <div className="mb-6 flex items-center justify-between">
+                  <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">{p.phase}</span>
+                  {p.highlight && (
+                    <span className="rounded-full bg-accent px-3 py-1 text-[11px] font-semibold text-white">추천</span>
+                  )}
+                </div>
+                <div className="mb-1 font-display text-2xl font-bold text-ink">{p.name}</div>
+                <p className="mb-6 text-sm font-light text-subtext">{p.tagline}</p>
+                <ul className="mb-8 flex-1 space-y-3 border-t border-line pt-6">
+                  {p.features.map((f) => (
+                    <li key={f} className="flex items-start gap-3 text-sm font-light text-ink/85">
+                      <span className="mt-0.5 font-bold text-accent">✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={PROTOTYPE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={
+                    p.highlight
+                      ? "rounded-full bg-accent py-3.5 text-center text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
+                      : "rounded-full border border-white/20 py-3.5 text-center text-sm font-medium text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
+                  }
+                >
+                  프로토타입 보기
+                </a>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </FadeInSection>
+
       {/* 7. FAQ */}
       <FadeInSection id="faq" className="bg-surfaceAlt px-6 py-28">
         <div className="mx-auto max-w-3xl">
@@ -668,7 +830,7 @@ export default function App() {
       <FadeInSection className="relative overflow-hidden bg-surfaceAlt px-6 py-36 text-center">
         <div
           className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(198,242,78,0.10), transparent 65%)" }}
+          style={{ background: "radial-gradient(circle, rgba(59,130,246,0.14), transparent 65%)" }}
         />
         <div className="relative z-10 mx-auto max-w-4xl">
           <h2 className="mb-12 font-display font-bold tracking-tight text-ink leading-[1.1] text-[5vw]">
@@ -681,7 +843,7 @@ export default function App() {
               href={PROTOTYPE_URL}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-accent px-10 py-4 text-sm font-semibold text-black transition-transform duration-300 hover:-translate-y-0.5"
+              className="rounded-full bg-accent px-10 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
             >
               프로토타입 보기
             </a>
@@ -696,25 +858,44 @@ export default function App() {
       </FadeInSection>
 
       {/* Footer */}
-      <footer className="border-t border-line bg-surface px-6 py-12">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="text-sm font-medium uppercase tracking-[0.25em] text-ink">Smart Campus DX</div>
-            <p className="mt-2 text-xs font-light text-subtext">공공기관 인재개발원 운영 디지털 전환 플랫폼</p>
+      <footer className="border-t border-line bg-surface px-6 pt-16 pb-10">
+        <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="max-w-xs">
+            <div className="mb-4 flex items-center gap-2 text-base font-bold text-ink">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent text-xs text-white">◆</span>
+              Smart Campus DX
+            </div>
+            <p className="text-xs font-light leading-relaxed text-subtext">
+              공공기관 인재개발원 운영을 위한 스마트 디지털 전환 플랫폼. 반복업무는 시스템에게, 사람은 교육에.
+            </p>
           </div>
-          <div className="flex flex-wrap items-center gap-6 text-sm font-light text-ink/70">
-            {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="transition-colors hover:text-ink">
-                {l.label}
-              </a>
-            ))}
-            <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="transition-colors hover:text-ink">
-              프로토타입
-            </a>
-          </div>
+          {[
+            { h: "바로가기", items: [["소개", "#problem"], ["기능", "#solution"], ["효과", "#stats"], ["도입 단계", "#plans"]] },
+            { h: "더 보기", items: [["현장 후기", "#voices"], ["FAQ", "#faq"], ["진행 절차", "#how"]] },
+            { h: "링크", items: [["프로토타입", PROTOTYPE_URL, true]] },
+          ].map((col) => (
+            <div key={col.h}>
+              <div className="mb-4 text-[11px] font-medium uppercase tracking-[0.25em] text-subtext">{col.h}</div>
+              <ul className="space-y-2.5">
+                {col.items.map(([label, href, ext]) => (
+                  <li key={label}>
+                    <a
+                      href={href}
+                      {...(ext ? { target: "_blank", rel: "noreferrer" } : {})}
+                      className="text-sm font-light text-ink/75 transition-colors hover:text-ink"
+                    >
+                      {label}
+                      {ext && " ↗"}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-        <div className="mx-auto mt-8 max-w-6xl border-t border-line pt-6 text-[11px] font-light uppercase tracking-[0.25em] text-subtext">
-          © 2026 Smart Campus DX
+        <div className="mx-auto mt-14 flex max-w-6xl items-center justify-between border-t border-line pt-6 text-[11px] font-light uppercase tracking-[0.25em] text-subtext">
+          <span>© 2026 Smart Campus DX</span>
+          <span>Seoul · Korea</span>
         </div>
       </footer>
     </div>
