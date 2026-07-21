@@ -167,7 +167,7 @@ function SectionLabel({ children }) {
   );
 }
 
-const CARD = "rounded-3xl border border-slate-200/80 bg-white shadow-[0_10px_30px_-12px_rgba(15,23,42,0.16)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_30px_55px_-18px_rgba(15,23,42,0.30)]";
+const CARD = "glossy rounded-3xl border border-slate-200/70 bg-gradient-to-b from-white to-slate-50/70 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.16)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_30px_55px_-18px_rgba(15,23,42,0.30)]";
 
 /* ---------- Charts ---------- */
 
@@ -672,7 +672,7 @@ export default function App() {
             </motion.div>
 
             {/* dark accent live-stat card */}
-            <motion.div custom={1} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className="flex flex-col justify-between rounded-3xl bg-slate-900 p-8 transition-transform duration-300 hover:-translate-y-1 md:col-span-2">
+            <motion.div custom={1} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className="glossy-dark flex flex-col justify-between rounded-3xl bg-gradient-to-b from-slate-800 to-slate-900 p-8 ring-1 ring-white/10 transition-transform duration-300 hover:-translate-y-1 md:col-span-2">
               <div className="flex items-center gap-2 text-sm font-medium text-white/70">
                 <span className="h-2 w-2 rounded-full bg-accentSoft" /> 연간 절감 목표
               </div>
@@ -753,12 +753,12 @@ export default function App() {
                 </li>
               ))}
             </ul>
-            <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="inline-block rounded-full bg-slate-900 px-8 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5">
+            <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="glossy-btn inline-block rounded-full bg-slate-900 px-8 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5">
               프로토타입 열기 →
             </a>
           </div>
 
-          <motion.div custom={0} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-xl">
+          <motion.div custom={0} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className="glossy rounded-3xl border border-slate-200/70 bg-gradient-to-b from-white to-slate-50/70 p-5 shadow-[0_20px_50px_-18px_rgba(15,23,42,0.30)]">
             <div className="mb-4 flex items-center gap-2 border-b border-slate-100 pb-4">
               <span className="h-3 w-3 rounded-full bg-slate-200" />
               <span className="h-3 w-3 rounded-full bg-slate-200" />
@@ -820,7 +820,7 @@ export default function App() {
           <SectionLabel>By the Numbers</SectionLabel>
           <div className="grid grid-cols-2 gap-6 border-t border-slate-200 pt-16 md:grid-cols-4">
             {STATS.map((s, i) => (
-              <motion.div key={s.label} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+              <motion.div key={s.label} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.4 }} className="glossy rounded-3xl border border-slate-200/70 bg-gradient-to-b from-white to-slate-50/70 p-6 shadow-[0_10px_30px_-12px_rgba(15,23,42,0.16)]">
                 <div style={{ color: s.color }}>
                   <CountUpNumber target={s.value} suffix={s.suffix} className="text-5xl md:text-6xl" colorOverride={s.color} />
                 </div>
@@ -854,7 +854,7 @@ export default function App() {
                   viewport={{ once: true, amount: 0.3 }}
                   className={
                     dark
-                      ? "flex flex-col rounded-3xl bg-slate-900 p-8 shadow-xl"
+                      ? "glossy-dark flex flex-col rounded-3xl bg-gradient-to-b from-slate-800 to-slate-900 p-8 shadow-xl ring-1 ring-white/10"
                       : `${CARD} flex flex-col p-8`
                   }
                 >
@@ -903,7 +903,7 @@ export default function App() {
             지금 시작합니다
           </h2>
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="rounded-full bg-accent px-10 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5">
+            <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="glossy-btn rounded-full bg-accent px-10 py-4 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5">
               프로토타입 보기
             </a>
             <a href="#problem" className="rounded-full border border-slate-300 bg-white px-10 py-4 text-sm font-medium text-slate-900 transition-colors duration-300 hover:bg-slate-900 hover:text-white">

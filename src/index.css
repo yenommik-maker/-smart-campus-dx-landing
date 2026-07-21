@@ -53,6 +53,62 @@ html {
   pointer-events: none;
 }
 
+/* 글로시(유리 광택) 효과 — 상단 하이라이트 + 얇은 윗선 */
+.glossy {
+  position: relative;
+}
+.glossy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.35) 11%,
+    rgba(255, 255, 255, 0) 34%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+.glossy-dark {
+  position: relative;
+}
+.glossy-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.06) 14%,
+    rgba(255, 255, 255, 0) 40%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+/* 버튼 대각선 광택 스트릭 */
+.glossy-btn {
+  position: relative;
+  overflow: hidden;
+}
+.glossy-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -30%;
+  width: 55%;
+  height: 100%;
+  transform: skewX(-18deg);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.35) 50%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  transition: left 0.6s ease;
+}
+.glossy-btn:hover::after {
+  left: 120%;
+}
+
 @keyframes fade-rise {
   from {
     opacity: 0;
