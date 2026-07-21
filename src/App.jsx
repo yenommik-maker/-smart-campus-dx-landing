@@ -167,7 +167,7 @@ function SectionLabel({ children }) {
   );
 }
 
-const CARD = "rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl";
+const CARD = "rounded-3xl border border-slate-200/80 bg-white shadow-[0_10px_30px_-12px_rgba(15,23,42,0.16)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_30px_55px_-18px_rgba(15,23,42,0.30)]";
 
 /* ---------- Charts ---------- */
 
@@ -469,8 +469,8 @@ function VideoHero() {
 
       <section className="relative z-10 flex flex-col items-center px-6 pt-32 pb-40 text-center">
         <h1
-          className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-[-2.46px] text-white sm:text-7xl md:text-8xl"
-          style={{ fontFamily: "'Instrument Serif', serif" }}
+          className="animate-fade-rise max-w-7xl break-keep text-5xl font-normal leading-[1.04] tracking-[-1.5px] text-white sm:text-7xl md:text-8xl"
+          style={{ fontFamily: "'Instrument Serif', serif", textShadow: "0 2px 24px rgba(4,12,28,0.45), 0 1px 2px rgba(4,12,28,0.35)" }}
         >
           인재개발원 운영이{" "}
           <em className="not-italic" style={{ color: "hsl(var(--muted-foreground))" }}>
@@ -533,46 +533,60 @@ const H2 = "font-display font-bold tracking-tight text-slate-900 leading-[1.08] 
 function SceneBackground() {
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,#E8F1FF 0%,#F3F7FF 38%,#FFFFFF 72%)" }} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(180deg,#E4EEFF 0%,#EFF5FF 34%,#FBFDFF 68%)" }} />
+      {/* 태양광 글로우 */}
+      <div className="absolute -top-32 right-[12%] h-[520px] w-[520px] rounded-full" style={{ background: "radial-gradient(circle,rgba(255,247,214,0.85),rgba(255,240,190,0.25) 42%,transparent 68%)" }} />
       <div className="absolute -top-24 left-[15%] h-[420px] w-[420px] rounded-full" style={{ background: "radial-gradient(circle,rgba(37,99,235,0.10),transparent 70%)" }} />
       <div className="absolute top-[30%] right-[8%] h-[380px] w-[380px] rounded-full" style={{ background: "radial-gradient(circle,rgba(124,58,237,0.08),transparent 70%)" }} />
       <div className="absolute bottom-[18vh] left-[40%] h-[320px] w-[320px] rounded-full" style={{ background: "radial-gradient(circle,rgba(16,185,129,0.10),transparent 70%)" }} />
-      <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 320" preserveAspectRatio="none" style={{ height: "46vh" }}>
+      <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 340" preserveAspectRatio="none" style={{ height: "50vh" }}>
         <defs>
-          {/* 위쪽에서 빛을 받는 느낌: 상단 밝고 하단 어두운 세로 그라디언트 */}
+          {/* 대기 원근: 먼 언덕은 밝고 흐리게, 가까운 언덕은 진하고 선명하게 */}
+          <linearGradient id="hillHaze" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#E9FBF0" />
+            <stop offset="1" stopColor="#CBEFD8" />
+          </linearGradient>
           <linearGradient id="hillFar" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#DCFCE7" />
-            <stop offset="1" stopColor="#A7E9C0" />
+            <stop offset="0" stopColor="#D6FBE4" />
+            <stop offset="1" stopColor="#98E1B7" />
           </linearGradient>
           <linearGradient id="hillMid" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#A7F3C6" />
-            <stop offset="1" stopColor="#5FCB8C" />
+            <stop offset="0" stopColor="#9FF0BF" />
+            <stop offset="1" stopColor="#4CBF80" />
           </linearGradient>
           <linearGradient id="hillNear" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="#6EE7A6" />
-            <stop offset="1" stopColor="#2FA968" />
+            <stop offset="0" stopColor="#5FE29A" />
+            <stop offset="0.55" stopColor="#2FB672" />
+            <stop offset="1" stopColor="#178A54" />
           </linearGradient>
           {/* 능선 겹침 그림자로 입체감 */}
           <linearGradient id="ridgeShadow" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor="rgba(6,78,59,0.28)" />
-            <stop offset="1" stopColor="rgba(6,78,59,0)" />
+            <stop offset="0" stopColor="rgba(4,66,44,0.34)" />
+            <stop offset="1" stopColor="rgba(4,66,44,0)" />
           </linearGradient>
+          <filter id="hazeBlur" x="-5%" y="-20%" width="110%" height="140%">
+            <feGaussianBlur stdDeviation="4" />
+          </filter>
         </defs>
 
-        {/* 가장 먼 언덕 */}
-        <path fill="url(#hillFar)" fillOpacity="0.9" d="M0,208 C240,150 480,262 720,214 C960,168 1200,250 1440,196 L1440,320 L0,320 Z" />
-        {/* 밝은 능선 하이라이트 */}
-        <path fill="none" stroke="#F0FDF4" strokeOpacity="0.7" strokeWidth="2.5" d="M0,208 C240,150 480,262 720,214 C960,168 1200,250 1440,196" />
+        {/* 대기 헤이즈(가장 먼 능선) — 흐릿하게 */}
+        <g filter="url(#hazeBlur)">
+          <path fill="url(#hillHaze)" fillOpacity="0.85" d="M0,176 C220,132 470,206 720,178 C980,148 1220,204 1440,170 L1440,340 L0,340 Z" />
+        </g>
 
-        {/* 중간 언덕 그림자 → 겹침 깊이 */}
-        <path fill="url(#ridgeShadow)" d="M0,244 C300,198 520,298 780,248 C1040,200 1240,282 1440,240 L1440,300 C1240,262 1040,340 780,290 C520,338 300,240 0,286 Z" />
-        <path fill="url(#hillMid)" fillOpacity="0.95" d="M0,244 C300,198 520,298 780,248 C1040,200 1240,282 1440,240 L1440,320 L0,320 Z" />
-        <path fill="none" stroke="#DCFCE7" strokeOpacity="0.65" strokeWidth="2.5" d="M0,244 C300,198 520,298 780,248 C1040,200 1240,282 1440,240" />
+        {/* 먼 언덕 */}
+        <path fill="url(#hillFar)" fillOpacity="0.95" d="M0,214 C240,152 480,268 720,218 C960,170 1200,256 1440,200 L1440,340 L0,340 Z" />
+        <path fill="none" stroke="#F3FEF7" strokeOpacity="0.75" strokeWidth="2.5" d="M0,214 C240,152 480,268 720,218 C960,170 1200,256 1440,200" />
 
-        {/* 가장 가까운 언덕 그림자 */}
-        <path fill="url(#ridgeShadow)" d="M0,282 C360,250 600,314 900,284 C1140,262 1300,300 1440,284 L1440,320 C1300,340 1140,306 900,326 C600,352 360,292 0,320 Z" />
-        <path fill="url(#hillNear)" d="M0,282 C360,250 600,314 900,284 C1140,262 1300,300 1440,284 L1440,320 L0,320 Z" />
-        <path fill="none" stroke="#BBF7D0" strokeOpacity="0.7" strokeWidth="2.5" d="M0,282 C360,250 600,314 900,284 C1140,262 1300,300 1440,284" />
+        {/* 중간 언덕 + 겹침 그림자 */}
+        <path fill="url(#ridgeShadow)" d="M0,252 C300,204 520,306 780,254 C1040,204 1240,290 1440,246 L1440,312 C1240,270 1040,352 780,298 C520,348 300,246 0,296 Z" />
+        <path fill="url(#hillMid)" d="M0,252 C300,204 520,306 780,254 C1040,204 1240,290 1440,246 L1440,340 L0,340 Z" />
+        <path fill="none" stroke="#DFFCEA" strokeOpacity="0.7" strokeWidth="2.5" d="M0,252 C300,204 520,306 780,254 C1040,204 1240,290 1440,246" />
+
+        {/* 가까운 언덕 + 짙은 겹침 그림자 */}
+        <path fill="url(#ridgeShadow)" d="M0,292 C360,258 600,326 900,294 C1140,270 1300,310 1440,294 L1440,336 C1300,356 1140,320 900,340 C600,366 360,300 0,332 Z" />
+        <path fill="url(#hillNear)" d="M0,292 C360,258 600,326 900,294 C1140,270 1300,310 1440,294 L1440,340 L0,340 Z" />
+        <path fill="none" stroke="#C4FAD8" strokeOpacity="0.8" strokeWidth="2.5" d="M0,292 C360,258 600,326 900,294 C1140,270 1300,310 1440,294" />
       </svg>
     </div>
   );
