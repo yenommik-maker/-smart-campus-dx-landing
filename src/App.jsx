@@ -544,10 +544,42 @@ function SceneBackground() {
       <div className="absolute -top-24 left-[15%] h-[420px] w-[420px] rounded-full" style={{ background: "radial-gradient(circle,rgba(37,99,235,0.10),transparent 70%)" }} />
       <div className="absolute top-[30%] right-[8%] h-[380px] w-[380px] rounded-full" style={{ background: "radial-gradient(circle,rgba(124,58,237,0.08),transparent 70%)" }} />
       <div className="absolute bottom-[18vh] left-[40%] h-[320px] w-[320px] rounded-full" style={{ background: "radial-gradient(circle,rgba(16,185,129,0.10),transparent 70%)" }} />
-      <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 320" preserveAspectRatio="none" style={{ height: "44vh" }}>
-        <path fill="#DCFCE7" fillOpacity="0.85" d="M0,208 C240,150 480,262 720,214 C960,168 1200,250 1440,196 L1440,320 L0,320 Z" />
-        <path fill="#BBF7D0" fillOpacity="0.85" d="M0,244 C300,198 520,298 780,248 C1040,200 1240,282 1440,240 L1440,320 L0,320 Z" />
-        <path fill="#86EFAC" fillOpacity="0.7" d="M0,282 C360,250 600,314 900,284 C1140,262 1300,300 1440,284 L1440,320 L0,320 Z" />
+      <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 320" preserveAspectRatio="none" style={{ height: "46vh" }}>
+        <defs>
+          {/* 위쪽에서 빛을 받는 느낌: 상단 밝고 하단 어두운 세로 그라디언트 */}
+          <linearGradient id="hillFar" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#DCFCE7" />
+            <stop offset="1" stopColor="#A7E9C0" />
+          </linearGradient>
+          <linearGradient id="hillMid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#A7F3C6" />
+            <stop offset="1" stopColor="#5FCB8C" />
+          </linearGradient>
+          <linearGradient id="hillNear" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="#6EE7A6" />
+            <stop offset="1" stopColor="#2FA968" />
+          </linearGradient>
+          {/* 능선 겹침 그림자로 입체감 */}
+          <linearGradient id="ridgeShadow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor="rgba(6,78,59,0.28)" />
+            <stop offset="1" stopColor="rgba(6,78,59,0)" />
+          </linearGradient>
+        </defs>
+
+        {/* 가장 먼 언덕 */}
+        <path fill="url(#hillFar)" fillOpacity="0.9" d="M0,208 C240,150 480,262 720,214 C960,168 1200,250 1440,196 L1440,320 L0,320 Z" />
+        {/* 밝은 능선 하이라이트 */}
+        <path fill="none" stroke="#F0FDF4" strokeOpacity="0.7" strokeWidth="2.5" d="M0,208 C240,150 480,262 720,214 C960,168 1200,250 1440,196" />
+
+        {/* 중간 언덕 그림자 → 겹침 깊이 */}
+        <path fill="url(#ridgeShadow)" d="M0,244 C300,198 520,298 780,248 C1040,200 1240,282 1440,240 L1440,300 C1240,262 1040,340 780,290 C520,338 300,240 0,286 Z" />
+        <path fill="url(#hillMid)" fillOpacity="0.95" d="M0,244 C300,198 520,298 780,248 C1040,200 1240,282 1440,240 L1440,320 L0,320 Z" />
+        <path fill="none" stroke="#DCFCE7" strokeOpacity="0.65" strokeWidth="2.5" d="M0,244 C300,198 520,298 780,248 C1040,200 1240,282 1440,240" />
+
+        {/* 가장 가까운 언덕 그림자 */}
+        <path fill="url(#ridgeShadow)" d="M0,282 C360,250 600,314 900,284 C1140,262 1300,300 1440,284 L1440,320 C1300,340 1140,306 900,326 C600,352 360,292 0,320 Z" />
+        <path fill="url(#hillNear)" d="M0,282 C360,250 600,314 900,284 C1140,262 1300,300 1440,284 L1440,320 L0,320 Z" />
+        <path fill="none" stroke="#BBF7D0" strokeOpacity="0.7" strokeWidth="2.5" d="M0,282 C360,250 600,314 900,284 C1140,262 1300,300 1440,284" />
       </svg>
     </div>
   );
@@ -816,7 +848,7 @@ export default function App() {
                   </div>
                   <div className={`mb-1 font-display text-2xl font-bold ${dark ? "text-white" : "text-slate-900"}`}>{p.name}</div>
                   <p className={`mb-6 text-sm font-light ${dark ? "text-white/60" : "text-slate-500"}`}>{p.tagline}</p>
-                  <ul className={`mb-8 flex-1 space-y-3 border-t pt-6 ${dark ? "border-white/10" : "border-slate-100"}`}>
+                  <ul className={`flex-1 space-y-3 border-t pt-6 ${dark ? "border-white/10" : "border-slate-100"}`}>
                     {p.features.map((f) => (
                       <li key={f} className={`flex items-start gap-3 text-sm font-light ${dark ? "text-white/85" : "text-slate-600"}`}>
                         <span className={`mt-0.5 font-bold ${dark ? "text-accentSoft" : "text-accent"}`}>✓</span>
@@ -824,18 +856,6 @@ export default function App() {
                       </li>
                     ))}
                   </ul>
-                  <a
-                    href={PROTOTYPE_URL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className={
-                      dark
-                        ? "rounded-full bg-white py-3.5 text-center text-sm font-semibold text-slate-900 transition-transform duration-300 hover:-translate-y-0.5"
-                        : "rounded-full bg-slate-900 py-3.5 text-center text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
-                    }
-                  >
-                    프로토타입 보기
-                  </a>
                 </motion.div>
               );
             })}
