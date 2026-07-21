@@ -70,7 +70,7 @@ const PLANS = [
   {
     phase: "3단계",
     name: "전면 도입",
-    tagline: "연수원 운영 전 과정으로",
+    tagline: "인재개발원 운영 전 과정으로",
     highlight: false,
     features: ["Smart Access 통합", "전 과정 표준 적용", "페이퍼리스 연계", "완전 자동화 운영"],
   },
@@ -603,7 +603,7 @@ export default function App() {
       <FadeInSection id="problem" className="px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Why It Matters</SectionLabel>
-          <h2 className={`mb-16 max-w-3xl ${H2}`}>반복업무가 연수원 운영을 막고 있습니다</h2>
+          <h2 className={`mb-16 max-w-3xl ${H2}`}>반복업무가 인재개발원 운영을 막고 있습니다</h2>
           <div className="grid items-stretch gap-6 md:grid-cols-2">
             <motion.div custom={0} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.3 }} className={`${CARD} p-8`}>
               <div className="mb-7 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400">Before</div>
@@ -636,7 +636,7 @@ export default function App() {
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Core Features</SectionLabel>
           <h2 className={`mb-16 ${H2}`}>
-            연수원 운영의
+            인재개발원 운영의
             <br />
             모든 것을 자동화
           </h2>
@@ -780,7 +780,7 @@ export default function App() {
         <div className="mx-auto max-w-6xl">
           <SectionLabel>How It Works</SectionLabel>
           <h2 className={`mb-16 ${H2}`}>
-            3단계로 연수원을
+            3단계로 인재개발원을
             <br />
             스마트하게
           </h2>
@@ -882,7 +882,7 @@ export default function App() {
         <div className="pointer-events-none absolute left-1/2 top-10 h-[420px] w-[720px] -translate-x-1/2 rounded-full" style={{ background: "radial-gradient(circle, rgba(37,99,235,0.14), transparent 65%)" }} />
         <div className="relative z-10 mx-auto max-w-4xl">
           <h2 className="mb-12 font-display font-bold tracking-tight text-slate-900 leading-[1.1] text-[5vw]">
-            연수원 운영의 디지털 전환,
+            인재개발원 운영의 디지털 전환,
             <br />
             지금 시작합니다
           </h2>
