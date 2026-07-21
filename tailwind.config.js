@@ -8,6 +8,7 @@ export default {
         surfaceAlt: "#0F0F0F",
         ink: "#F5F0E8",
         subtext: "#9C968C",
+        accent: "#C6F24E",
       },
       borderColor: {
         line: "rgba(255, 255, 255, 0.1)",
@@ -15,6 +16,7 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "Pretendard", "-apple-system", "Noto Sans KR", "sans-serif"],
+        display: ['"Space Grotesk"', '"Noto Sans KR"', "Inter", "sans-serif"],
         serif: ['"Instrument Serif"', '"Noto Serif KR"', "serif"],
       },
     },

@@ -228,13 +228,15 @@ function FadeInSection({ children, className = "", id }) {
 
 function SectionLabel({ children }) {
   return (
-    <div className="mb-6 text-[11px] font-medium uppercase tracking-[0.28em] text-ink/50">
+    <div className="mb-6 flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.28em] text-accent">
+      <span className="h-1.5 w-1.5 rounded-full bg-accent" />
       {children}
     </div>
   );
 }
 
-const CARD = "rounded-2xl border border-white/[0.08] bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:border-white/20";
+const CARD =
+  "rounded-3xl border border-white/[0.08] bg-gradient-to-b from-white/[0.05] to-white/[0.01] transition-all duration-300 hover:-translate-y-1 hover:border-accent/40";
 
 function GhostButton({ href, children, external = false }) {
   return (
@@ -264,7 +266,7 @@ function CountUpNumber({ target, suffix = "", className = "text-[8vw]" }) {
   }, [inView, target]);
 
   return (
-    <span ref={ref} className={`font-serif italic font-normal text-ink whitespace-nowrap leading-none ${className}`}>
+    <span ref={ref} className={`font-display font-bold tracking-tight text-ink whitespace-nowrap leading-none ${className}`}>
       {display.toLocaleString()}
       {suffix}
     </span>
@@ -452,7 +454,7 @@ export default function App() {
       <FadeInSection id="problem" className="bg-surface px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Why It Matters</SectionLabel>
-          <h2 className="mb-16 max-w-3xl font-serif italic font-normal text-ink leading-[1.08] text-[5vw]">
+          <h2 className="mb-16 max-w-3xl font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
             반복업무가 연수원 운영을 막고 있습니다
           </h2>
           <div className="grid items-stretch gap-6 md:grid-cols-2">
@@ -486,7 +488,7 @@ export default function App() {
               <div className="grid grid-cols-2 gap-6">
                 {AFTER_STATS.map((s) => (
                   <div key={s.label}>
-                    <div className="font-serif italic text-5xl text-ink md:text-6xl">{s.value}</div>
+                    <div className="font-display text-5xl font-bold tracking-tight text-accent md:text-6xl">{s.value}</div>
                     <div className="mt-2 text-sm font-light text-subtext">{s.label}</div>
                   </div>
                 ))}
@@ -500,35 +502,40 @@ export default function App() {
       <FadeInSection id="solution" className="bg-surfaceAlt px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>Core Features</SectionLabel>
-          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.08] text-[5vw]">
+          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
             연수원 운영의
             <br />
             모든 것을 자동화
           </h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            {FEATURES.map((f, i) => (
-              <motion.div
-                key={f.title}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
-                className={`${CARD} p-8`}
-              >
-                <div className="mb-5 text-3xl">{f.icon}</div>
-                <div className="mb-3 font-serif italic text-3xl text-ink">{f.title}</div>
-                <p className="mb-6 text-sm font-light leading-relaxed text-subtext">{f.desc}</p>
-                <ul className="space-y-2.5 border-t border-line pt-5">
-                  {f.points.map((p) => (
-                    <li key={p} className="flex items-center gap-3 text-sm font-light text-ink/80">
-                      <span className="h-1 w-1 shrink-0 rounded-full bg-ink/50" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
+          <div className="grid gap-5 md:grid-cols-6">
+            {FEATURES.map((f, i) => {
+              const span = [i % 4 === 0 || i % 4 === 3 ? "md:col-span-4" : "md:col-span-2"][0];
+              return (
+                <motion.div
+                  key={f.title}
+                  custom={i}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.3 }}
+                  className={`${CARD} ${span} p-10`}
+                >
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10 text-2xl ring-1 ring-accent/20">
+                    {f.icon}
+                  </div>
+                  <div className="mb-3 font-display text-2xl font-bold text-ink">{f.title}</div>
+                  <p className="mb-6 max-w-md text-sm font-light leading-relaxed text-subtext">{f.desc}</p>
+                  <ul className="flex flex-wrap gap-x-6 gap-y-2.5 border-t border-line pt-6">
+                    {f.points.map((p) => (
+                      <li key={p} className="flex items-center gap-2 text-sm font-light text-ink/80">
+                        <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </FadeInSection>
@@ -538,7 +545,7 @@ export default function App() {
         <div className="mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-2">
           <div>
             <SectionLabel>Platform Overview</SectionLabel>
-            <h2 className="mb-6 font-serif italic font-normal text-ink leading-[1.1] text-[4vw]">
+            <h2 className="mb-6 font-display font-bold tracking-tight text-ink leading-[1.1] text-[4vw]">
               실제 운영 화면을
               <br />
               직접 확인하세요
@@ -549,7 +556,7 @@ export default function App() {
             <ul className="mb-10 space-y-3">
               {PLATFORM_CHECKS.map((c) => (
                 <li key={c} className="flex items-start gap-3 text-sm font-light text-ink/90 md:text-base">
-                  <span className="mt-0.5 text-ink">✓</span>
+                  <span className="mt-0.5 font-bold text-accent">✓</span>
                   {c}
                 </li>
               ))}
@@ -558,7 +565,7 @@ export default function App() {
               href={PROTOTYPE_URL}
               target="_blank"
               rel="noreferrer"
-              className="inline-block rounded-full bg-ink px-8 py-4 text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5"
+              className="inline-block rounded-full bg-accent px-8 py-4 text-sm font-semibold text-black transition-transform duration-300 hover:-translate-y-0.5"
             >
               프로토타입 열기 ↗
             </a>
@@ -595,7 +602,7 @@ export default function App() {
       <FadeInSection id="how" className="bg-surfaceAlt px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>How It Works</SectionLabel>
-          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.08] text-[5vw]">
+          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
             3단계로 연수원을
             <br />
             스마트하게
@@ -611,7 +618,7 @@ export default function App() {
                 viewport={{ once: true, amount: 0.3 }}
                 className={`${CARD} p-8`}
               >
-                <div className="mb-6 font-serif italic text-5xl text-ink/30">Step {s.num}</div>
+                <div className="mb-6 font-display font-bold text-5xl text-ink/25">Step {s.num}</div>
                 <div className="mb-3 text-xl font-medium text-ink">{s.title}</div>
                 <p className="text-sm font-light leading-relaxed text-subtext">{s.desc}</p>
               </motion.div>
@@ -646,7 +653,7 @@ export default function App() {
       <FadeInSection id="faq" className="bg-surfaceAlt px-6 py-28">
         <div className="mx-auto max-w-3xl">
           <SectionLabel>FAQ</SectionLabel>
-          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.08] text-[5vw]">
+          <h2 className="mb-16 font-display font-bold tracking-tight text-ink leading-[1.08] text-[5vw]">
             자주 묻는 질문
           </h2>
           <div className="border-t border-line">
@@ -661,10 +668,10 @@ export default function App() {
       <FadeInSection className="relative overflow-hidden bg-surfaceAlt px-6 py-36 text-center">
         <div
           className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(245,240,232,0.06), transparent 65%)" }}
+          style={{ background: "radial-gradient(circle, rgba(198,242,78,0.10), transparent 65%)" }}
         />
         <div className="relative z-10 mx-auto max-w-4xl">
-          <h2 className="mb-12 font-serif italic font-normal text-ink leading-[1.1] text-[5vw]">
+          <h2 className="mb-12 font-display font-bold tracking-tight text-ink leading-[1.1] text-[5vw]">
             연수원 운영의 디지털 전환,
             <br />
             지금 시작합니다
@@ -674,7 +681,7 @@ export default function App() {
               href={PROTOTYPE_URL}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-ink px-10 py-4 text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5"
+              className="rounded-full bg-accent px-10 py-4 text-sm font-semibold text-black transition-transform duration-300 hover:-translate-y-0.5"
             >
               프로토타입 보기
             </a>
