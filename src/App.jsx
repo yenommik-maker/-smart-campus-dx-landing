@@ -14,91 +14,95 @@ import {
 const PROTOTYPE_URL = "https://yenommik-maker.github.io/smart-campus-dx-prototype/";
 
 const NAV_LINKS = [
-  { href: "#problem", label: "소개", num: "01" },
-  { href: "#solution", label: "기능", num: "02" },
-  { href: "#stats", label: "효과", num: "03" },
-  { href: "#roadmap", label: "로드맵", num: "04" },
+  { href: "#problem", label: "소개" },
+  { href: "#solution", label: "기능" },
+  { href: "#stats", label: "효과" },
+  { href: "#how", label: "로드맵" },
 ];
 
-const PROBLEMS = [
-  { title: "수요조사", desc: "버스·객실 수요조사지 배포와 취합", hours: "3h" },
-  { title: "엑셀정리", desc: "설문 결과를 엑셀로 일일이 정리", hours: "2h" },
-  { title: "업체연락", desc: "버스·식당 등 협력업체 유선 연락", hours: "2h" },
-  { title: "객실배정", desc: "성별·조 편성을 고려한 수기 객실배정", hours: "3h" },
-  { title: "종이출력", desc: "시간표·좌석표·안내문 출력과 게시", hours: "2h" },
-  { title: "현장확인", desc: "입퇴실·탑승 여부를 일일이 현장 확인", hours: "4h" },
+const BEFORE_ITEMS = [
+  "버스 수요조사 수기 취합 3시간",
+  "탑승 인원 현장 확인 4시간",
+  "객실 배정 민원 전화 대응 3시간",
+  "시간표 종이 출력·부착 2시간",
 ];
 
-const SOLUTIONS = [
+const AFTER_STATS = [
+  { value: "1,400h", label: "연간 반복업무" },
+  { value: "70%", label: "자동화 목표" },
+];
+
+const FEATURES = [
   {
+    icon: "🚌",
     title: "Smart Bus",
-    desc: "버스 수요조사부터 탑승 확인까지 전 과정을 앱 하나로 자동화합니다.",
-    steps: ["수요조사", "노선확정", "좌석선택", "탑승QR"],
+    desc: "버스 수요조사부터 노선·좌석 배정, QR 탑승 확인까지 한 흐름으로 처리합니다.",
+    points: ["수요조사 자동 집계", "노선·좌석 배정", "QR 탑승 확인"],
   },
   {
+    icon: "🛏️",
     title: "Smart Room",
-    desc: "신청기간 내 본인선택, 마감 후 규칙 기반 자동배정으로 민원을 줄입니다.",
-    steps: ["본인선택", "신청마감", "자동배정", "배정완료"],
+    desc: "신청기간 내 본인 선택 후 규칙 기반 자동배정, 필요 시 수동조정까지 지원합니다.",
+    points: ["본인 신청 접수", "규칙 기반 자동배정", "객실 수동조정"],
   },
   {
+    icon: "🗓️",
     title: "Smart Schedule",
     desc: "시간표를 한 번 입력하면 앱·DID·QR까지 자동으로 연동됩니다.",
-    steps: ["시간표입력", "앱연동", "DID연동", "QR연동"],
+    points: ["시간표 일괄 입력", "앱·DID 연동", "강의실 QR 안내"],
   },
   {
+    icon: "🔑",
     title: "Smart Access",
-    desc: "QR 하나로 출결·식사·탑승 확인까지 현장 확인 업무를 대체합니다.",
-    steps: ["QR발급", "출결확인", "식수확인", "탑승확인"],
+    desc: "역할별 권한관리부터 공지 발송, 모바일 학생증 QR까지 현장 운영을 통합합니다.",
+    points: ["역할별 권한관리", "공지·알림 발송", "모바일 학생증 QR"],
   },
 ];
 
-const DEVICE_FEATURES = [
-  { label: "버스예약" },
-  { label: "객실확인" },
-  { label: "강의일정" },
-  { label: "출결QR" },
+const PLATFORM_CHECKS = [
+  "버스·객실·시간표를 하나의 앱에서",
+  "운영자·교육생·관리자 역할별 화면",
+  "실시간 수요 집계 및 자동 처리",
+];
+
+const HOW_STEPS = [
+  { num: "01", title: "현황 분석", desc: "현황 분석 인터뷰를 통해 운영 요구사항을 도출합니다." },
+  { num: "02", title: "프로토타입 검증", desc: "클릭형 프로토타입으로 검증한 뒤 MVP를 개발합니다." },
+  { num: "03", title: "시범 운영", desc: "시범 운영으로 효과를 확인하고 전면 확대합니다." },
 ];
 
 const STATS = [
-  { value: 980, suffix: "h", label: "연간 절감" },
-  { value: 106, suffix: "개", label: "자동화 과정" },
+  { value: 980, suffix: "h", label: "연간 절감 가능 업무시간" },
+  { value: 106, suffix: "개", label: "연간 운영 과정 수" },
   { value: 0, suffix: "장", label: "종이 출력 목표" },
-  { value: 70, suffix: "%", label: "업무 자동화율" },
+  { value: 70, suffix: "%", label: "반복업무 자동화율" },
 ];
 
-const ROADMAP = [
-  {
-    year: "2026",
-    items: ["Smart Bus 파일럿 도입", "Smart Room 시범운영", "교육생 앱 베타 출시", "1개 인재개발원 적용"],
-  },
-  {
-    year: "2027",
-    items: ["Smart Schedule 전면 도입", "페이퍼리스 사업 연계 확대", "전 인재개발원으로 확산", "운영 데이터 대시보드 구축"],
-  },
-  {
-    year: "2028~",
-    items: ["AI 기반 수요예측 도입", "기관 전체 표준 플랫폼화", "외부 기관 벤치마킹 대응", "완전 자동화 운영체계 완성"],
-  },
+const TICKER_ITEMS = [
+  "Smart Bus",
+  "Smart Room",
+  "Smart Schedule",
+  "Smart Access",
+  "연간 980시간 절감",
+  "페이퍼리스 연계",
 ];
-
-const TICKER_ITEMS = ["Smart Bus", "Smart Room", "Smart Schedule", "Smart Access", "Smart Campus DX"];
 
 const FAQS = [
   {
-    q: "기존 내부 시스템과 충돌하지 않나요?",
-    a: "Smart Campus DX는 기존 행정프로그램과 별도로 동작하는 보조 플랫폼입니다. 기존 QR 출결·행정 시스템을 대체하지 않고, 중복되는 수기 업무만 자동화합니다.",
+    q: "기존 내부 행정프로그램과 충돌하지 않나요?",
+    a: "기존 시스템은 그대로 유지하면서 현장 운영 영역만 보완합니다. 행정·출결 등 기존 프로그램을 대체하지 않고 중복되는 수기 업무만 자동화합니다.",
   },
   {
-    q: "예산은 얼마나 필요한가요?",
-    a: "단계별 파일럿 도입을 전제로 최소 비용으로 시작할 수 있습니다. 정확한 규모는 인재개발원 운영 현황 파악 후 별도 협의가 필요합니다.",
+    q: "예산이 얼마나 필요한가요?",
+    a: "플랫폼 개발비는 별도 산정이며, 현장 Wi-Fi 구축은 초기 약 3,000만원 규모로 예상됩니다. 단계별 도입으로 초기 부담을 낮출 수 있습니다.",
   },
   {
     q: "교육생 기기가 없으면 어떻게 하나요?",
-    a: "페이퍼리스 사업과 연계해 아이패드를 지급하거나, 개인 스마트폰으로도 동일한 기능을 이용할 수 있도록 반응형으로 설계할 수 있습니다.",
+    a: "페이퍼리스 사업(아이패드 지급)과 연계하면 별도 장비 구입 없이 운영할 수 있습니다. 개인 스마트폰으로도 동일한 기능을 이용할 수 있도록 반응형으로 설계합니다.",
   },
   {
     q: "도입까지 얼마나 걸리나요?",
-    a: "클릭형 프로토타입 검증 후 파일럿 과정 1~2개에 우선 적용하며, 통상 3개월 내 첫 시범운영이 가능합니다.",
+    a: "1단계 Smart Bus 시범 운영은 2026년 하반기를 목표로 하며, 검증 후 다음 단계로 순차 확대합니다.",
   },
 ];
 
@@ -224,11 +228,13 @@ function FadeInSection({ children, className = "", id }) {
 
 function SectionLabel({ children }) {
   return (
-    <div className="mb-6 lowercase text-[11px] font-normal tracking-[0.35em] text-subtext">
+    <div className="mb-6 text-[11px] font-medium uppercase tracking-[0.28em] text-ink/50">
       {children}
     </div>
   );
 }
+
+const CARD = "rounded-2xl border border-white/[0.08] bg-white/[0.03] transition-all duration-300 hover:-translate-y-1 hover:border-white/20";
 
 function GhostButton({ href, children, external = false }) {
   return (
@@ -242,7 +248,7 @@ function GhostButton({ href, children, external = false }) {
   );
 }
 
-function CountUpNumber({ target, suffix = "" }) {
+function CountUpNumber({ target, suffix = "", className = "text-[8vw]" }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, amount: 0.5 });
   const [display, setDisplay] = useState(0);
@@ -258,24 +264,24 @@ function CountUpNumber({ target, suffix = "" }) {
   }, [inView, target]);
 
   return (
-    <span ref={ref} className="font-serif italic font-normal text-ink whitespace-nowrap text-[8vw] leading-none">
+    <span ref={ref} className={`font-serif italic font-normal text-ink whitespace-nowrap leading-none ${className}`}>
       {display.toLocaleString()}
       {suffix}
     </span>
   );
 }
 
-function FaqItem({ index, q, a }) {
+function FaqItem({ q, a }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-line py-6">
-      <button onClick={() => setOpen((v) => !v)} className="flex w-full items-center gap-5 text-left">
-        <span className="w-10 shrink-0 font-mono text-xs text-subtext">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <span className="flex-1 text-base font-medium text-ink">{q}</span>
+    <div className="border-b border-line">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center gap-5 py-6 text-left"
+      >
+        <span className="flex-1 text-base font-medium text-ink md:text-lg">{q}</span>
         <span
-          className={`shrink-0 text-xl font-light text-ink transition-transform duration-300 ${open ? "rotate-45" : ""}`}
+          className={`shrink-0 text-2xl font-light text-ink transition-transform duration-300 ${open ? "rotate-45" : ""}`}
         >
           +
         </span>
@@ -286,10 +292,10 @@ function FaqItem({ index, q, a }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <p className="pt-3 pl-[3.75rem] text-sm font-light leading-relaxed text-subtext">{a}</p>
+            <p className="pb-6 pr-10 text-sm font-light leading-relaxed text-subtext">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -306,7 +312,7 @@ const HERO_NAV = [
   { href: "#problem", label: "소개" },
   { href: "#solution", label: "기능" },
   { href: "#stats", label: "효과" },
-  { href: "#roadmap", label: "로드맵" },
+  { href: "#how", label: "로드맵" },
   { href: PROTOTYPE_URL, label: "프로토타입", external: true },
 ];
 
@@ -402,22 +408,30 @@ function VideoHero() {
 function MarqueeTicker() {
   const loop = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
   return (
-    <div className="relative z-10 overflow-hidden border-b border-line bg-surface py-6">
+    <div className="relative z-10 overflow-hidden border-y border-line bg-surface py-6">
+      <div className="mb-4 text-center text-[11px] font-medium uppercase tracking-[0.28em] text-ink/40">
+        Trusted Building Blocks
+      </div>
       <motion.div
-        className="flex w-max gap-12 whitespace-nowrap"
+        className="flex w-max gap-10 whitespace-nowrap"
         animate={{ x: ["0%", "-33.3333%"] }}
-        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
       >
         {loop.map((t, i) => (
-          <span
-            key={i}
-            className="flex items-center gap-12 font-serif italic text-2xl md:text-3xl text-ink/20"
-          >
+          <span key={i} className="flex items-center gap-10 text-lg font-light text-ink/40 md:text-xl">
             {t}
-            <span className="text-ink/30">✦</span>
+            <span className="text-ink/20">·</span>
           </span>
         ))}
       </motion.div>
+      <div
+        className="pointer-events-none absolute inset-y-0 left-0 w-32"
+        style={{ background: "linear-gradient(90deg, #0A0A0A, transparent)" }}
+      />
+      <div
+        className="pointer-events-none absolute inset-y-0 right-0 w-32"
+        style={{ background: "linear-gradient(270deg, #0A0A0A, transparent)" }}
+      />
     </div>
   );
 }
@@ -434,139 +448,183 @@ export default function App() {
 
       <MarqueeTicker />
 
-      {/* 2. Problem */}
+      {/* 2. Problem — Before / After */}
       <FadeInSection id="problem" className="bg-surface px-6 py-28">
         <div className="mx-auto max-w-6xl">
-          <SectionLabel>Why We Built This</SectionLabel>
-          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.05] text-[6vw]">
-            지금 반복되는
-            <br />
-            업무들
+          <SectionLabel>Why It Matters</SectionLabel>
+          <h2 className="mb-16 max-w-3xl font-serif italic font-normal text-ink leading-[1.08] text-[5vw]">
+            반복업무가 연수원 운영을 막고 있습니다
           </h2>
-          <div className="border-t border-line">
-            {PROBLEMS.map((p, i) => (
-              <motion.div
-                key={p.title}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.4 }}
-                className="group flex items-baseline gap-8 border-b border-line py-7"
-              >
-                <span className="w-10 shrink-0 font-mono text-xs text-subtext">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div className="flex-1">
-                  <span className="text-xl font-normal text-ink md:text-2xl">{p.title}</span>
-                  <span className="ml-5 hidden text-sm font-light text-subtext md:inline">{p.desc}</span>
-                </div>
-                <span className="shrink-0 font-serif italic text-3xl text-ink/0 transition-colors duration-300 group-hover:text-ink">
-                  {p.hours}
-                </span>
-              </motion.div>
-            ))}
+          <div className="grid items-stretch gap-6 md:grid-cols-2">
+            <motion.div
+              custom={0}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.3 }}
+              className={`${CARD} p-8`}
+            >
+              <div className="mb-7 text-[11px] font-medium uppercase tracking-[0.28em] text-ink/50">Before</div>
+              <ul className="space-y-5">
+                {BEFORE_ITEMS.map((t) => (
+                  <li key={t} className="flex items-start gap-3 text-sm font-light text-subtext md:text-base">
+                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-ink/50" />
+                    {t}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+            <motion.div
+              custom={1}
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.3 }}
+              className={`${CARD} flex flex-col justify-center gap-8 p-8`}
+            >
+              <div className="text-[11px] font-medium uppercase tracking-[0.28em] text-ink/50">After</div>
+              <div className="grid grid-cols-2 gap-6">
+                {AFTER_STATS.map((s) => (
+                  <div key={s.label}>
+                    <div className="font-serif italic text-5xl text-ink md:text-6xl">{s.value}</div>
+                    <div className="mt-2 text-sm font-light text-subtext">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           </div>
-          <p className="mt-10 text-right text-sm font-light text-subtext">
-            과정 1개당 16시간 × 연간 106개 = <span className="text-ink">연간 1,400시간 낭비</span>
-          </p>
         </div>
       </FadeInSection>
 
-      {/* 3. Solution */}
-      <FadeInSection id="solution" className="bg-surface px-6 py-28">
+      {/* 3. Core Features */}
+      <FadeInSection id="solution" className="bg-surfaceAlt px-6 py-28">
         <div className="mx-auto max-w-6xl">
-          <SectionLabel>What We Built</SectionLabel>
-          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.05] text-[6vw]">
-            What We
+          <SectionLabel>Core Features</SectionLabel>
+          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.08] text-[5vw]">
+            연수원 운영의
             <br />
-            Built
+            모든 것을 자동화
           </h2>
           <div className="grid gap-6 md:grid-cols-2">
-            {SOLUTIONS.map((s, i) => (
+            {FEATURES.map((f, i) => (
               <motion.div
-                key={s.title}
+                key={f.title}
                 custom={i}
                 variants={fadeUp}
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.3 }}
-                className="liquid-glass group rounded-2xl p-8 ring-1 ring-white/10 transition-all duration-300 hover:ring-white/30"
+                className={`${CARD} p-8`}
               >
-                <div className="mb-5 font-mono text-xs text-subtext">/{String(i + 1).padStart(2, "0")}</div>
-                <div className="mb-3 font-serif italic text-3xl text-ink">{s.title}</div>
-                <p className="mb-6 max-w-sm text-sm font-light leading-relaxed text-subtext">{s.desc}</p>
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-light text-subtext">
-                  {s.steps.map((step, j) => (
-                    <React.Fragment key={step}>
-                      <span>{step}</span>
-                      {j < s.steps.length - 1 && <span className="text-ink/30">→</span>}
-                    </React.Fragment>
+                <div className="mb-5 text-3xl">{f.icon}</div>
+                <div className="mb-3 font-serif italic text-3xl text-ink">{f.title}</div>
+                <p className="mb-6 text-sm font-light leading-relaxed text-subtext">{f.desc}</p>
+                <ul className="space-y-2.5 border-t border-line pt-5">
+                  {f.points.map((p) => (
+                    <li key={p} className="flex items-center gap-3 text-sm font-light text-ink/80">
+                      <span className="h-1 w-1 shrink-0 rounded-full bg-ink/50" />
+                      {p}
+                    </li>
                   ))}
-                </div>
+                </ul>
               </motion.div>
             ))}
           </div>
         </div>
       </FadeInSection>
 
-      {/* 4. Device Mockup */}
-      <FadeInSection id="devices" className="bg-surfaceAlt px-6 py-28">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 items-center gap-12">
+      {/* 4. Platform Overview */}
+      <FadeInSection id="platform" className="bg-surface px-6 py-28">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 md:grid-cols-2">
           <div>
-            <SectionLabel>One Device</SectionLabel>
-            <h2 className="mb-6 font-serif italic font-normal text-ink leading-[1.05] text-[4.5vw]">
-              아이패드 하나로
+            <SectionLabel>Platform Overview</SectionLabel>
+            <h2 className="mb-6 font-serif italic font-normal text-ink leading-[1.1] text-[4vw]">
+              실제 운영 화면을
               <br />
-              모든 것을
+              직접 확인하세요
             </h2>
-            <p className="mb-10 text-base font-light leading-relaxed text-subtext">
-              버스 예약부터 출결까지, 흩어져 있던 연수 과정 전체를
-              <br />
-              하나의 화면 안에서 끝냅니다.
+            <p className="mb-8 text-base font-light leading-relaxed text-subtext">
+              클릭형 프로토타입에서 운영자·교육생·관리자 화면을 직접 눌러볼 수 있습니다.
             </p>
-            <div className="flex flex-wrap gap-2">
-              {DEVICE_FEATURES.map((f) => (
+            <ul className="mb-10 space-y-3">
+              {PLATFORM_CHECKS.map((c) => (
+                <li key={c} className="flex items-start gap-3 text-sm font-light text-ink/90 md:text-base">
+                  <span className="mt-0.5 text-ink">✓</span>
+                  {c}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={PROTOTYPE_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-block rounded-full bg-ink px-8 py-4 text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5"
+            >
+              프로토타입 열기 ↗
+            </a>
+          </div>
+          <motion.div
+            custom={0}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.3 }}
+            className={`${CARD} overflow-hidden`}
+          >
+            <div className="flex items-center gap-2 border-b border-line px-5 py-4">
+              <span className="h-3 w-3 rounded-full bg-white/20" />
+              <span className="h-3 w-3 rounded-full bg-white/20" />
+              <span className="h-3 w-3 rounded-full bg-white/20" />
+              <span className="ml-4 text-xs font-light text-subtext">smart-campus-dx / dashboard</span>
+            </div>
+            <div className="grid grid-cols-2 gap-4 p-6">
+              {["버스 수요조사 92%", "객실 자동배정 완료", "오늘 강의 4교시", "탑승 QR 24/34"].map((t) => (
                 <div
-                  key={f.label}
-                  className="rounded-full border border-line px-4 py-2 text-xs font-light text-ink/80"
+                  key={t}
+                  className="rounded-xl border border-line bg-white/[0.02] p-5 text-xs font-light text-ink/80"
                 >
-                  {f.label}
+                  {t}
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
+        </div>
+      </FadeInSection>
 
-          <div className="relative h-[420px] w-full">
-            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <div
-                className="h-80 w-80 rounded-full"
-                style={{ background: "radial-gradient(circle, rgba(245,240,232,0.06), transparent 70%)" }}
-              />
-            </div>
-            <Canvas camera={{ position: [0, 0, 7], fov: 35 }}>
-              <SceneLights />
-              <Float speed={1.2} rotationIntensity={0.15} floatIntensity={0.6}>
-                <IPadMesh position={[-1.2, 0, 0]} scale={0.85} rotationSpeed={0.1} />
-              </Float>
-              <Float speed={1.6} rotationIntensity={0.2} floatIntensity={0.9}>
-                <PhoneMesh position={[1.5, -0.4, 0.5]} scale={0.85} rotationSpeed={0.12} />
-              </Float>
-            </Canvas>
+      {/* 5. How It Works */}
+      <FadeInSection id="how" className="bg-surfaceAlt px-6 py-28">
+        <div className="mx-auto max-w-6xl">
+          <SectionLabel>How It Works</SectionLabel>
+          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.08] text-[5vw]">
+            3단계로 연수원을
+            <br />
+            스마트하게
+          </h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {HOW_STEPS.map((s, i) => (
+              <motion.div
+                key={s.num}
+                custom={i}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.3 }}
+                className={`${CARD} p-8`}
+              >
+                <div className="mb-6 font-serif italic text-5xl text-ink/30">Step {s.num}</div>
+                <div className="mb-3 text-xl font-medium text-ink">{s.title}</div>
+                <p className="text-sm font-light leading-relaxed text-subtext">{s.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </FadeInSection>
 
-      {/* 5. Stats */}
-      <FadeInSection id="stats" className="bg-surfaceAlt px-6 py-28">
+      {/* 6. Stats */}
+      <FadeInSection id="stats" className="bg-surface px-6 py-28">
         <div className="mx-auto max-w-6xl">
           <SectionLabel>By the Numbers</SectionLabel>
-          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.05] text-[6vw]">
-            숫자로 보는
-            <br />
-            변화
-          </h2>
-          <div className="grid grid-cols-2 gap-x-10 gap-y-16 border-t border-line pt-16 md:grid-cols-2">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-14 border-t border-line pt-16 md:grid-cols-4">
             {STATS.map((s, i) => (
               <motion.div
                 key={s.label}
@@ -576,192 +634,81 @@ export default function App() {
                 whileInView="show"
                 viewport={{ once: true, amount: 0.4 }}
               >
-                <CountUpNumber target={s.value} suffix={s.suffix} />
-                <div className="mt-4 text-sm font-light text-subtext">{s.label}</div>
+                <CountUpNumber target={s.value} suffix={s.suffix} className="text-6xl md:text-7xl" />
+                <div className="mt-3 text-sm font-light text-subtext">{s.label}</div>
               </motion.div>
             ))}
           </div>
         </div>
       </FadeInSection>
 
-      {/* 6. Paperless Synergy */}
-      <FadeInSection id="synergy" className="bg-surface px-6 py-28">
-        <div className="mx-auto max-w-6xl">
-          <SectionLabel>Synergy</SectionLabel>
-          <div className="grid items-center gap-16 md:grid-cols-2">
-            <div>
-              <h2 className="mb-8 font-serif italic font-normal text-ink leading-[1.1] text-[4.5vw]">
-                아이패드 1대
-                <br />= 모든 것
-              </h2>
-              <p className="mb-6 text-base font-light leading-relaxed text-subtext">
-                페이퍼리스 사업이 전 교육생에게 아이패드를 지급해 종이 교재를 디지털로 전환하고,
-                Smart Campus DX가 버스·객실·일정·출결까지 인재개발원 운영 전 과정을 자동화합니다.
-              </p>
-              <p className="text-sm font-light text-subtext">교재 + 정보 + 버스 + 객실 + 출결</p>
-            </div>
-            <div className="space-y-4">
-              {["페이퍼리스 사업 — 종이 교재의 디지털 전환", "Smart Campus DX — 운영 전 과정의 자동화"].map(
-                (t, i) => (
-                  <motion.div
-                    key={t}
-                    custom={i}
-                    variants={fadeUp}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, amount: 0.4 }}
-                    className="liquid-glass rounded-2xl p-8 text-sm font-light text-ink/90 ring-1 ring-white/10 transition-all duration-300 hover:ring-white/30"
-                  >
-                    <span className="mr-4 font-mono text-xs text-subtext">{i === 0 ? "( A )" : "( B )"}</span>
-                    {t}
-                  </motion.div>
-                )
-              )}
-              <div className="liquid-glass rounded-2xl p-8 text-center font-serif italic text-2xl text-ink ring-1 ring-white/10">
-                A × B = 시너지
-              </div>
-            </div>
-          </div>
-        </div>
-      </FadeInSection>
-
-      {/* 7. Roadmap */}
-      <FadeInSection id="roadmap" className="bg-surface px-6 py-28">
-        <div className="mx-auto max-w-6xl">
-          <SectionLabel>Roadmap</SectionLabel>
-          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.05] text-[6vw]">
-            3개년 단계별
-            <br />
-            추진 로드맵
-          </h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {ROADMAP.map((r, i) => (
-              <motion.div
-                key={r.year}
-                custom={i}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.3 }}
-                className="liquid-glass rounded-2xl p-8 ring-1 ring-white/10 transition-all duration-300 hover:ring-white/30"
-              >
-                <div className="mb-7 font-serif italic text-5xl text-ink">{r.year}</div>
-                <ul className="space-y-3">
-                  {r.items.map((item) => (
-                    <li key={item} className="flex items-start gap-3 text-sm font-light leading-relaxed text-subtext">
-                      <span className="mt-2 h-px w-4 shrink-0 bg-ink/40" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </FadeInSection>
-
-      {/* 8. FAQ */}
-      <FadeInSection id="faq" className="bg-surface px-6 py-28">
+      {/* 7. FAQ */}
+      <FadeInSection id="faq" className="bg-surfaceAlt px-6 py-28">
         <div className="mx-auto max-w-3xl">
           <SectionLabel>FAQ</SectionLabel>
-          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.05] text-[5vw]">
+          <h2 className="mb-16 font-serif italic font-normal text-ink leading-[1.08] text-[5vw]">
             자주 묻는 질문
           </h2>
           <div className="border-t border-line">
-            {FAQS.map((f, i) => (
-              <FaqItem key={f.q} index={i} {...f} />
+            {FAQS.map((f) => (
+              <FaqItem key={f.q} {...f} />
             ))}
           </div>
         </div>
       </FadeInSection>
 
-      {/* 9. CTA */}
-      <FadeInSection className="relative overflow-hidden bg-surface px-6 py-36 text-center">
+      {/* 8. CTA */}
+      <FadeInSection className="relative overflow-hidden bg-surfaceAlt px-6 py-36 text-center">
         <div
           className="pointer-events-none absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(245,240,232,0.05), transparent 65%)" }}
+          style={{ background: "radial-gradient(circle, rgba(245,240,232,0.06), transparent 65%)" }}
         />
         <div className="relative z-10 mx-auto max-w-4xl">
-          <SectionLabel>Get Started</SectionLabel>
-          <h2 className="mb-12 font-serif italic font-normal text-ink leading-[1.08] text-[5.5vw]">
-            스마트 캠퍼스 DX,
+          <h2 className="mb-12 font-serif italic font-normal text-ink leading-[1.1] text-[5vw]">
+            연수원 운영의 디지털 전환,
             <br />
-            지금 시작하세요
+            지금 시작합니다
           </h2>
-          <div className="mb-8 flex items-center justify-center gap-4">
-            <GhostButton href={PROTOTYPE_URL} external>
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <a
+              href={PROTOTYPE_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-full bg-ink px-10 py-4 text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5"
+            >
               프로토타입 보기
-            </GhostButton>
-            <GhostButton href="#problem">자세히 알아보기</GhostButton>
+            </a>
+            <a
+              href="#problem"
+              className="rounded-full border border-white/30 px-10 py-4 text-sm font-medium text-ink transition-colors duration-300 hover:bg-white hover:text-black"
+            >
+              자세히 알아보기
+            </a>
           </div>
-          <p className="text-sm font-light text-subtext">인재개발원 운영의 디지털 전환, 함께 만들어갑니다</p>
         </div>
       </FadeInSection>
 
       {/* Footer */}
-      <footer className="overflow-hidden border-t border-line bg-surface px-6 pt-16">
-        <div className="mx-auto max-w-6xl">
-          <div className="flex flex-col gap-10 pb-16 md:flex-row md:items-start md:justify-between">
-            <div className="max-w-xs">
-              <div className="mb-3 text-xs font-medium uppercase tracking-[0.25em] text-ink">
-                Smart Campus DX
-              </div>
-              <p className="text-xs font-light leading-relaxed text-subtext">
-                공공기관 인재개발원 운영 디지털 전환 플랫폼.
-                <br />
-                반복업무는 시스템에게, 사람은 교육에.
-              </p>
-            </div>
-            <div className="flex gap-16">
-              <div>
-                <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-subtext">Menu</div>
-                <ul className="space-y-2">
-                  {NAV_LINKS.map((l) => (
-                    <li key={l.href}>
-                      <a href={l.href} className="text-sm font-light text-ink/80 transition-colors hover:text-ink">
-                        {l.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <div className="mb-3 text-[11px] font-medium uppercase tracking-[0.3em] text-subtext">More</div>
-                <ul className="space-y-2">
-                  <li>
-                    <a href="#synergy" className="text-sm font-light text-ink/80 transition-colors hover:text-ink">시너지</a>
-                  </li>
-                  <li>
-                    <a href="#faq" className="text-sm font-light text-ink/80 transition-colors hover:text-ink">FAQ</a>
-                  </li>
-                  <li>
-                    <a
-                      href={PROTOTYPE_URL}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-sm font-light text-ink transition-colors hover:text-subtext"
-                    >
-                      프로토타입 ↗
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+      <footer className="border-t border-line bg-surface px-6 py-12">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="text-sm font-medium uppercase tracking-[0.25em] text-ink">Smart Campus DX</div>
+            <p className="mt-2 text-xs font-light text-subtext">공공기관 인재개발원 운영 디지털 전환 플랫폼</p>
           </div>
-          <div className="flex items-center justify-between border-t border-line py-5 text-[11px] font-light uppercase tracking-[0.25em] text-subtext">
-            <span>© 2026 Smart Campus DX</span>
-            <span>Seoul · Korea</span>
+          <div className="flex flex-wrap items-center gap-6 text-sm font-light text-ink/70">
+            {NAV_LINKS.map((l) => (
+              <a key={l.href} href={l.href} className="transition-colors hover:text-ink">
+                {l.label}
+              </a>
+            ))}
+            <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="transition-colors hover:text-ink">
+              프로토타입
+            </a>
           </div>
         </div>
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="select-none whitespace-nowrap text-center font-serif italic font-normal leading-none text-ink/10 text-[8.5vw] -mb-[1.7vw]"
-        >
-          Smart Campus DX
-        </motion.div>
+        <div className="mx-auto mt-8 max-w-6xl border-t border-line pt-6 text-[11px] font-light uppercase tracking-[0.25em] text-subtext">
+          © 2026 Smart Campus DX
+        </div>
       </footer>
     </div>
   );
