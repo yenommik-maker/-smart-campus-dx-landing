@@ -472,16 +472,16 @@ function VideoHero() {
           className="animate-fade-rise max-w-7xl break-keep text-5xl font-normal leading-[1.04] tracking-[-1.5px] text-white sm:text-7xl md:text-8xl"
           style={{ fontFamily: "'Instrument Serif', serif", textShadow: "0 2px 24px rgba(4,12,28,0.45), 0 1px 2px rgba(4,12,28,0.35)" }}
         >
-          인재개발원 운영이{" "}
+          건강보험 인재의 내일,{" "}
           <em className="not-italic" style={{ color: "hsl(var(--muted-foreground))" }}>
-            스스로 돌아갑니다.
+            디지털로 다시 설계합니다.
           </em>
         </h1>
         <p
           className="animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed sm:text-lg"
           style={{ color: "hsl(var(--muted-foreground))" }}
         >
-          연간 1,400시간의 반복업무를 자동화하고, 교육생 중심의 스마트 인재개발원을 구축합니다.
+          국민건강보험공단 인재개발원의 연간 1,400시간 반복업무를 자동화하고, 담당자는 오직 교육에 집중할 수 있는 스마트 캠퍼스를 구축합니다.
         </p>
         <div className="animate-fade-rise-delay-2 mt-12 flex flex-wrap items-center justify-center gap-4">
           <a href={PROTOTYPE_URL} target="_blank" rel="noreferrer" className="liquid-glass rounded-full px-14 py-5 text-white">
